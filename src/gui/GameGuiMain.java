@@ -10,6 +10,7 @@ import game.Player;
 import javax.swing.JFrame;
 
 public class GameGuiMain implements Observer {
+	private static final int MAXBOTS = 15;
 	private JFrame frame = new JFrame("pcd.io");
 	private BoardJComponent boardGui;
 	private Game game;
@@ -46,7 +47,7 @@ public class GameGuiMain implements Observer {
 			e.printStackTrace();
 		}*/
 
-		for (int i = 1; i <= 15; i++ ){
+		for (int i = 1; i <= MAXBOTS; i++ ){
 			Player player = new PhoneyHumanPlayer(i, game, (byte)(3));
 			player.start();
 		}
