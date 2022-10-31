@@ -3,25 +3,27 @@ package game;
 
 
 import environment.Cell;
+import environment.Coordinate;
 
 /**
  * Represents a player.
  * @author luismota
  *
  */
-public abstract class Player  {
-
-
+public abstract class Player extends Thread  {
 	protected  Game game;
-
 	private int id;
-
 	private byte currentStrength;
 	protected byte originalStrength;
 
+	private Coordinate posicao;
 	// TODO: get player position from data in game
 	public Cell getCurrentCell() {
-		return null;
+		return game.getCell(posicao);
+	}
+
+	public void updatePosition(Coordinate at){
+		posicao = at;
 	}
 
 	public Player(int id, Game game, byte strength) {
@@ -32,8 +34,15 @@ public abstract class Player  {
 		originalStrength=strength;
 	}
 
+	public int getIDPlayer(){
+		return id;
+	}
 	public abstract boolean isHumanPlayer();
-	
+
+	public abstract void move();
+	@Override
+	public abstract void run();
+
 	@Override
 	public String toString() {
 		return "Player [id=" + id + ", currentStrength=" + currentStrength + ", getCurrentCell()=" + getCurrentCell()

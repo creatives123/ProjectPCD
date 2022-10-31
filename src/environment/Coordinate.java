@@ -29,4 +29,5 @@ public class Coordinate {
 	public Coordinate translate(Coordinate vector) {
 		return new Coordinate(x+vector.x, y+vector.y);
 	}
+
 }

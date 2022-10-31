@@ -27,11 +27,13 @@ public class Cell {
 		return player;
 	}
 
-	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
+	//TODO Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
 	
-	
+	public void removePlayer(){
+		player = null;
+	}
 
 }
