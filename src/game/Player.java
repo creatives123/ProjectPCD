@@ -39,7 +39,16 @@ public abstract class Player extends Thread  {
 	}
 	public abstract boolean isHumanPlayer();
 
-	public abstract void move();
+	public void move(Coordinate direction){
+		Coordinate nextposition = this.getCurrentCell().getPosition().translate(direction);
+		Cell newCell = game.getCell(nextposition);
+		game.getCell(this.getCurrentCell().getPosition()).removePlayer();
+		newCell.setPlayer(this);
+		this.updatePosition(newCell.getPosition());
+		game.notifyChange();
+	
+	}
+	
 	@Override
 	public abstract void run();
 

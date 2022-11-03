@@ -1,6 +1,8 @@
 package game;
 
 import environment.Cell;
+import environment.Coordinate;
+import environment.Direction;
 
 /**
  * Class to demonstrate a player being added to the game.
@@ -23,23 +25,20 @@ public class PhoneyHumanPlayer extends Player {
 
 		while (super.getCurrentStrength() != 0){
 			try {
-				Thread.sleep((long) ((Math.random() + 1)) * getIDPlayer() * 1000);
+				//Thread.sleep((long) ((Math.random() + 1)) * getIDPlayer() * 1000);
+				Thread.sleep(Game.REFRESH_INTERVAL);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			move();
+			move(Direction.random().getVector());
 			System.out.println("Bot id: " + getIDPlayer() + " still Alive " + this);
 		}
 		System.out.println("End Bot ID: " + getIDPlayer());
 	}
 
 	@Override
-	public void move() {
-		Cell newCell = game.getRandomCell();
-		game.getCell(this.getCurrentCell().getPosition()).removePlayer();
-		newCell.setPlayer(this);
-		this.updatePosition(newCell.getPosition());
-		game.notifyChange();
+	public void move(Coordinate direction) {
+		super.move(direction);
 	}
 }
