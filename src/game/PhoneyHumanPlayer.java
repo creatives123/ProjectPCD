@@ -25,6 +25,7 @@ public class PhoneyHumanPlayer extends Player {
 			game.addPlayerToGame(this);
 		} catch (InterruptedException e1) {
 			System.out.println("Sou o " + getIDPlayer() + " e estou à espera \n");
+			e1.printStackTrace();
 		}
 
 		while (super.getCurrentStrength() != 0){

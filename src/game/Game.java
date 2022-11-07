@@ -2,6 +2,10 @@ package game;
 
 
 import java.util.Observable;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import environment.Cell;
 import environment.Coordinate;
 
@@ -17,6 +21,11 @@ public class Game extends Observable {
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
 	public static final long INITIAL_WAITING_TIME = 10000;
 
+	//Tentativa de um Lock
+	private final Lock lock;
+	private final Condition isEmpty;
+	private final Condition isFull;
+
 	protected Cell[][] board;
 
 	public Game() {
@@ -25,23 +34,31 @@ public class Game extends Observable {
 		for (int x = 0; x < Game.DIMX; x++) 
 			for (int y = 0; y < Game.DIMY; y++) 
 				board[x][y] = new Cell(new Coordinate(x, y),this);
+		lock = new ReentrantLock();
+        isEmpty = lock.newCondition();
+        isFull = lock.newCondition();
 	}
 	
 	/** 
 	 * @param player 
 	 * @throws InterruptedException
 	 */
-	public synchronized void addPlayerToGame(Player player) throws InterruptedException {
+	public void addPlayerToGame(Player player) throws InterruptedException {
+		
 		Cell initialPos=getRandomCell();
+		lock.lock();
 		while(initialPos.isOcupied()){
 			System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + initialPos.getPosition() + " Ocupada pelo " + initialPos.getPlayer().getIDPlayer() + "\n");
-			wait();
+			isFull.await();
 		}
 		player.updatePosition(initialPos.getPosition());
 		initialPos.setPlayer(player);
+		
+		isEmpty.signal();
+		lock.unlock();
 		// To update GUI
-		notifyAll();
 		notifyChange();
+		
 		
 	}
 
