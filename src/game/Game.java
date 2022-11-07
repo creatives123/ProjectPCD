@@ -29,12 +29,18 @@ public class Game extends Observable {
 	
 	/** 
 	 * @param player 
+	 * @throws InterruptedException
 	 */
-	public void addPlayerToGame(Player player) {
+	public synchronized void addPlayerToGame(Player player) throws InterruptedException {
 		Cell initialPos=getRandomCell();
+		while(initialPos.isOcupied()){
+			System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + initialPos.getPosition() + " Ocupada pelo " + initialPos.getPlayer().getIDPlayer() + "\n");
+			wait();
+		}
 		player.updatePosition(initialPos.getPosition());
 		initialPos.setPlayer(player);
 		// To update GUI
+		notifyAll();
 		notifyChange();
 		
 	}

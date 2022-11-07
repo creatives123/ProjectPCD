@@ -21,7 +21,11 @@ public class PhoneyHumanPlayer extends Player {
 	@Override
 	public void run() {
 		System.out.println("Start Bot ID: " + getIDPlayer());
-		game.addPlayerToGame(this);
+		try {
+			game.addPlayerToGame(this);
+		} catch (InterruptedException e1) {
+			System.out.println("Sou o " + getIDPlayer() + " e estou à espera \n");
+		}
 
 		while (super.getCurrentStrength() != 0){
 			try {
