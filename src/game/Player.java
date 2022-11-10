@@ -4,6 +4,7 @@ package game;
 
 import environment.Cell;
 import environment.Coordinate;
+import environment.Direction;
 
 /**
  * Represents a player.
@@ -41,6 +42,9 @@ public abstract class Player extends Thread  {
 
 	public void move(Coordinate direction){
 		Coordinate nextposition = this.getCurrentCell().getPosition().translate(direction);
+		while(nextposition.x > 29 || nextposition.x < 0 || nextposition.y < 0 || nextposition.y > 29){
+			nextposition = this.getCurrentCell().getPosition().translate(Direction.random().getVector());
+		}
 		Cell newCell = game.getCell(nextposition);
 		game.getCell(this.getCurrentCell().getPosition()).removePlayer();
 		newCell.setPlayer(this);

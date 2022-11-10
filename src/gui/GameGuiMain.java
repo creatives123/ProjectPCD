@@ -3,6 +3,8 @@ package gui;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
+
 import game.Game;
 import game.PhoneyHumanPlayer;
 import game.Player;
@@ -14,6 +16,9 @@ public class GameGuiMain implements Observer {
 	private JFrame frame = new JFrame("pcd.io");
 	private BoardJComponent boardGui;
 	private Game game;
+	//RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
+	Random randomGenerator = new Random();
+	
 
 	private LinkedList<Player> listBots = new LinkedList<>();
 
@@ -48,7 +53,9 @@ public class GameGuiMain implements Observer {
 		}*/
 
 		for (int i = 1; i <= MAXBOTS; i++ ){
-			Player player = new PhoneyHumanPlayer(i, game, (byte)(3));
+			// RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
+			int rand = randomGenerator.nextInt(3) + 1;
+			Player player = new PhoneyHumanPlayer(i, game, (byte)(rand));
 			player.start();
 		}
 	}

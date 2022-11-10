@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Random;
+
 import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
@@ -10,8 +12,13 @@ import environment.Direction;
  *
  */
 public class PhoneyHumanPlayer extends Player {
+	//Variável para guardar a força com qual o player começa. Importante para o move
+	int initialstrenght;
+
+
 	public PhoneyHumanPlayer(int id, Game game, byte strength) {
 		super(id, game, strength);
+		initialstrenght = (int) strength;
 	}
 
 	public boolean isHumanPlayer() {
@@ -31,7 +38,8 @@ public class PhoneyHumanPlayer extends Player {
 		while (super.getCurrentStrength() != 0){
 			try {
 				//Thread.sleep((long) ((Math.random() + 1)) * getIDPlayer() * 1000);
-				Thread.sleep(Game.REFRESH_INTERVAL);
+				//Multiplicamos o REFRESH_INTERVAL pelo initialstrenght para diferenciar os ciclos de movimento
+				Thread.sleep(Game.REFRESH_INTERVAL * initialstrenght);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
