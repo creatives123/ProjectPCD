@@ -12,7 +12,7 @@ import game.Player;
 import javax.swing.JFrame;
 
 public class GameGuiMain implements Observer {
-	private static final int MAXBOTS = 50;
+	private static final int MAXBOTS = 100;
 	private JFrame frame = new JFrame("pcd.io");
 	private BoardJComponent boardGui;
 	private Game game;

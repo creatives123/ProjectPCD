@@ -38,29 +38,6 @@ public class Game extends Observable {
         isEmpty = lock.newCondition();
         isFull = lock.newCondition();
 	}
-	
-	/** 
-	 * @param player 
-	 * @throws InterruptedException
-	 */
-	public void addPlayerToGame(Player player) throws InterruptedException {
-		
-		Cell initialPos=getRandomCell();
-		lock.lock();
-		while(initialPos.isOcupied()){
-			System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + initialPos.getPosition() + " Ocupada pelo " + initialPos.getPlayer().getIDPlayer() + "\n");
-			isFull.await();
-		}
-		player.updatePosition(initialPos.getPosition());
-		initialPos.setPlayer(player);
-		
-		isEmpty.signal();
-		lock.unlock();
-		// To update GUI
-		notifyChange();
-		
-		
-	}
 
 	public Cell getCell(Coordinate at) {
 		return board[at.x][at.y];

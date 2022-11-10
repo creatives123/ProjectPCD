@@ -29,29 +29,34 @@ public class PhoneyHumanPlayer extends Player {
 	public void run() {
 		System.out.println("Start Bot ID: " + getIDPlayer());
 		try {
-			game.addPlayerToGame(this);
+			Cell initialPos=game.getRandomCell();
+			initialPos.setPlayer(this);
 		} catch (InterruptedException e1) {
 			System.out.println("Sou o " + getIDPlayer() + " e estou à espera \n");
 			e1.printStackTrace();
 		}
 
-		while (super.getCurrentStrength() != 0){
+		while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != 10){
 			try {
 				//Thread.sleep((long) ((Math.random() + 1)) * getIDPlayer() * 1000);
 				//Multiplicamos o REFRESH_INTERVAL pelo initialstrenght para diferenciar os ciclos de movimento
 				Thread.sleep(Game.REFRESH_INTERVAL * initialstrenght);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (InterruptedException ignored) {
 			}
-			move(Direction.random().getVector());
-			System.out.println("Bot id: " + getIDPlayer() + " still Alive " + this);
+			ThreadWait threadwait = new ThreadWait(this);
+			threadwait.start();
+
+			try {
+				move(Direction.random().getVector());
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			threadwait.interrupt();
 		}
-		System.out.println("End Bot ID: " + getIDPlayer());
 	}
 
 	@Override
-	public void move(Coordinate direction) {
+	public void move(Coordinate direction) throws InterruptedException {
 		super.move(direction);
 	}
 }
