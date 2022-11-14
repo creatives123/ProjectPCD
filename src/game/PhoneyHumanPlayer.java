@@ -27,31 +27,35 @@ public class PhoneyHumanPlayer extends Player {
 
 	@Override
 	public void run() {
-		System.out.println("Start Bot ID: " + getIDPlayer());
 		try {
 			Cell initialPos=game.getRandomCell();
 			initialPos.setPlayer(this);
-		} catch (InterruptedException e1) {
-			System.out.println("Sou o " + getIDPlayer() + " e estou à espera \n");
-			e1.printStackTrace();
+		} catch (InterruptedException ignore) {
 		}
 
-		while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != 10){
+		// O bot só executa enquanto o currentStrenght estiver entre ]0; 10[ e o jogo não tiver vencedores
+		while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != 10 && !game.Winners()){
 			try {
 				//Thread.sleep((long) ((Math.random() + 1)) * getIDPlayer() * 1000);
 				//Multiplicamos o REFRESH_INTERVAL pelo initialstrenght para diferenciar os ciclos de movimento
 				Thread.sleep(Game.REFRESH_INTERVAL * initialstrenght);
-			} catch (InterruptedException ignored) {
+			} catch (InterruptedException ignore) {
 			}
-			ThreadWait threadwait = new ThreadWait(this);
-			threadwait.start();
 
-			try {
+			// move do bot
+			// Criamos uma thread de wait para prevenir que o bot fique parado eternamente.
+			ThreadWait threadwait = new ThreadWait(this);
+			try{
+
+				threadwait.start();
+
 				move(Direction.random().getVector());
+				// move foi com sucesso então terminamos
+				threadwait.interrupt();
 			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
+				threadwait.interrupt();
 			}
-			threadwait.interrupt();
+
 		}
 	}
 

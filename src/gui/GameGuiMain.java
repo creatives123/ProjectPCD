@@ -12,15 +12,11 @@ import game.Player;
 import javax.swing.JFrame;
 
 public class GameGuiMain implements Observer {
-	private static final int MAXBOTS = 100;
-	private JFrame frame = new JFrame("pcd.io");
+	private final JFrame frame = new JFrame("pcd.io");
 	private BoardJComponent boardGui;
 	private Game game;
 	//RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
-	Random randomGenerator = new Random();
-	
 
-	private LinkedList<Player> listBots = new LinkedList<>();
 
 	public GameGuiMain() {
 		super();
@@ -43,21 +39,11 @@ public class GameGuiMain implements Observer {
 
 	public void init()  {
 		frame.setVisible(true);
+		game.addBots();
 
-		/* Demo players, should be deleted
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		System.out.println("\n #### 3 vencedores encontrados #### \n");
 
-		for (int i = 1; i <= MAXBOTS; i++ ){
-			// RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
-			int rand = randomGenerator.nextInt(3) + 1;
-			Player player = new PhoneyHumanPlayer(i, game, (byte)(rand));
-			player.start();
-		}
+
 	}
 
 	@Override

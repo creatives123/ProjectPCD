@@ -47,6 +47,7 @@ public class Cell {
 			System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + this.getPosition() + " Ocupada pelo " + this.getPlayer().getIDPlayer() + "\n");
 			isFull.await();
 		}
+		System.out.println("Player " + player.getIDPlayer() + " fui posto na celula");
 		player.updatePosition(this.getPosition());
 		this.player = player;
 		isEmpty.signal();
@@ -56,12 +57,16 @@ public class Cell {
 
 	public synchronized void movePlayer(Player player) throws InterruptedException {
 
-		if (this.isOcupied()) {
+		if (this.isOcupied() && this.player.isActive()) {
 			switch (fightCastle(this.player, player)) {
 				case 1 -> conquerCastle(this.player, player);
 				case 2 -> conquerCastle(player, this.player);
 			}
-		}else {
+		} else if (this.isOcupied() && !this.player.isActive() && !this.player.isHumanPlayer()) {
+			// Em caso um bot tentar mover-se para uma celula com um jogador morto ou vencedor fica a espera
+			// Esta espera vai ser interrompida com uma sub thread que fica a espera 2 segundos no player
+			wait();
+		} else {
 			game.getCell(player.getCurrentCell().getPosition()).removePlayer();
 			player.updatePosition(this.getPosition());
 			this.player = player;

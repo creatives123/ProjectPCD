@@ -13,12 +13,11 @@ import environment.Direction;
  */
 public abstract class Player extends Thread  {
 	protected  Game game;
-	private int id;
+	private final int id;
 	private byte currentStrength;
 	protected byte originalStrength;
 
 	private Coordinate posicao;
-	// TODO: get player position from data in game
 	public Cell getCurrentCell() {
 		return game.getCell(posicao);
 	}
@@ -61,10 +60,17 @@ public abstract class Player extends Thread  {
 		if (newStrenght >= 10){
 			this.currentStrength = (byte) 10;
 			this.interrupt();
+			game.updateWinners();
 		}else {
 			this.currentStrength = (byte) newStrenght;
 		}
 	}
+
+	public boolean isActive(){
+		// Retorna se o jogador ainda está ativo no jogo
+		return getCurrentStrength() > 0 && getCurrentStrength() < 10;
+	}
+
 	@Override
 	public abstract void run();
 
