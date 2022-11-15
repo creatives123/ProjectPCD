@@ -24,9 +24,7 @@ public class Game extends Observable {
     public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
     public static final long INITIAL_WAITING_TIME = 10000;
     //Tentativa de um Lock
-    private final Lock lock;
-    private final Condition isEmpty;
-    private final Condition isFull;
+
 
     private final AtomicInteger totalWinners = new AtomicInteger(0);
     protected Cell[][] board;
@@ -40,9 +38,7 @@ public class Game extends Observable {
         for (int x = 0; x < Game.DIMX; x++)
             for (int y = 0; y < Game.DIMY; y++)
                 board[x][y] = new Cell(new Coordinate(x, y), this);
-        lock = new ReentrantLock();
-        isEmpty = lock.newCondition();
-        isFull = lock.newCondition();
+
     }
 
     public Cell getCell(Coordinate at) {

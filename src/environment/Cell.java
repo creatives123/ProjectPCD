@@ -8,23 +8,23 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.sound.midi.Track;
+
 public class Cell {
 	private Coordinate position;
 	private Game game;
 	private Player player=null;
 
-	private final Lock lock;
-	private final Condition isEmpty;
-	private final Condition isFull;
+	private Lock lock = new ReentrantLock();
+	private Condition isEmpty = lock.newCondition();
+	private Condition isFull = lock.newCondition();
 
 	public Cell(Coordinate position,Game g) {
 		super();
 		this.position = position;
 		this.game=g;
 
-		lock = new ReentrantLock();
-		isEmpty = lock.newCondition();
-		isFull = lock.newCondition();
+	
 	}
 
 	public Coordinate getPosition() {
@@ -43,17 +43,22 @@ public class Cell {
 	//TODO Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 	public void setPlayer(Player player) throws InterruptedException {
 		lock.lock();
-		while(this.isOcupied()){
-			System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + this.getPosition() + " Ocupada pelo " + this.getPlayer().getIDPlayer() + "\n");
-			isFull.await();
+		try{	
+			while(this.isOcupied()){
+				System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + this.getPosition() + " Ocupada pelo " + this.getPlayer().getIDPlayer() + "\n");
+				isFull.await();
+			}
+			System.out.println("Player " + player.getIDPlayer() + " fui posto na celula");
+			player.updatePosition(this.getPosition());
+			this.player = player;
+			isFull.signal();
+		} 
+		finally{
+			lock.unlock();
+			game.notifyChange();
 		}
-		System.out.println("Player " + player.getIDPlayer() + " fui posto na celula");
-		player.updatePosition(this.getPosition());
-		this.player = player;
-		isEmpty.signal();
-		lock.unlock();
-		game.notifyChange();
-	}
+
+		}
 
 	public synchronized void movePlayer(Player player) throws InterruptedException {
 
