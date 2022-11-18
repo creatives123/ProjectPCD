@@ -6,16 +6,20 @@ import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Represents a player.
  * @author luismota
  *
  */
-public abstract class Player extends Thread  {
+public abstract class Player extends Thread implements Comparable<Player>  {
 	protected  Game game;
 	private final int id;
 	private byte currentStrength;
 	protected byte originalStrength;
+
 
 	private Coordinate posicao;
 	public Cell getCurrentCell() {
@@ -109,5 +113,10 @@ public abstract class Player extends Thread  {
 
 	public int getIdentification() {
 		return id;
+	}
+
+	@Override
+	public int compareTo(Player o){
+		return id-o.id;
 	}
 }
