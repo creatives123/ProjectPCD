@@ -70,7 +70,7 @@ public class Game extends Observable {
 
     public boolean Winners() {
         // Saber se ja temos vencedores
-        return totalWinners.get() == 3;
+        return totalWinners.get() == 20;
     }
 
     public void addBots(){

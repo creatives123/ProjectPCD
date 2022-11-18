@@ -19,9 +19,6 @@ public class Cell {
     public Condition isEmpty = lock.newCondition();
     private Condition isFull = lock.newCondition();
 
-    public Lock lockMove = new ReentrantLock();
-    public boolean action = false;
-
     public Cell(Coordinate position, Game g) {
         super();
         this.position = position;
@@ -61,40 +58,48 @@ public class Cell {
     }
 
     public synchronized void movePlayer(Player player) throws InterruptedException {
-        Cell playerCurrentCell = player.getCurrentCell();
-
-        lock.lock();
-        playerCurrentCell.lock.lock();
-
-        if (this.isOcupied() && this.player.isActive()) {
-            switch (fightCastle(this.player, player)) {
-                case 1 -> conquerCastle(this.player, player);
-                case 2 -> conquerCastle(player, this.player);
-            }
-        } else if (this.isOcupied() && !this.player.isActive() && !this.player.isHumanPlayer()) {
+       
+        while(this.isOcupied() && !this.player.isActive() && !this.player.isHumanPlayer()) {
             // Em caso um bot tentar mover-se para uma celula com um jogador morto ou vencedor fica a espera
             // Esta espera vai ser interrompida com uma sub thread que fica a espera 2 segundos no player
             wait();
-        } else {
-            game.getCell(player.getCurrentCell().getPosition()).removePlayer();
-            player.updatePosition(this.getPosition());
-            this.player = player;
-
         }
-        lock.unlock();
-        playerCurrentCell.lock.unlock();
 
+        Cell playerCurrentCell = player.getCurrentCell();
+        playerCurrentCell.lock.lock();
+        lock.lock();
 
+        try{
+            if(this.isOcupied() && this.player.isActive()) {
+                switch (fightCastle(this.player, player)) {
+                    case 1 -> conquerCastle(this.player, player);
+                    case 2 -> conquerCastle(player, this.player);
+                }
+                lock.unlock();
+                playerCurrentCell.lock.unlock();
+            }else{
+                game.getCell(player.getCurrentCell().getPosition()).removePlayer();
+                player.updatePosition(this.getPosition());
+                this.player = player;
+                playerCurrentCell.lock.unlock();
+                lock.unlock();
+            }
+
+        }finally{
         game.notifyChange();
+        }
+
+        
     }
 
-    public void removePlayer() {
-        player = null;
+    public synchronized void removePlayer() {
         lock.lock();
+        player = null;
         try {
             isFull.signal();
         } finally {
             lock.unlock();
+            game.notifyChange();
         }
     }
 
@@ -109,10 +114,14 @@ public class Cell {
         }
     }
 
-    private void conquerCastle(Player winnerPlayer, Player defeatPlayer) {
+    private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer) {
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());
         defeatPlayer.interrupt();
+        if(winnerPlayer.getCurrentStrength()>= (byte) 10){
+            winnerPlayer.interrupt();
+        }
+        game.notifyChange();
     }
 
 }
