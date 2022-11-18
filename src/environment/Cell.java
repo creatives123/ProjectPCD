@@ -120,13 +120,15 @@ public class Cell {
         }
     }
 
-    private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer) throws InterruptedException {
+    private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer){
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());
-        defeatPlayer.interrupt();
-        if(winnerPlayer.getCurrentStrength()>= (byte) 10){
-            winnerPlayer.interrupt();
+        try {
+            defeatPlayer.interrupt();
+        } catch (Exception e) {
+            System.out.println(defeatPlayer.getIDPlayer() + " Foi morto");
         }
+        
     }
 
 }
