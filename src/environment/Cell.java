@@ -66,6 +66,8 @@ public class Cell {
         }
 
         Cell playerCurrentCell = player.getCurrentCell();
+        //Lock Lógica
+        //1 - Bloquear a Célula onde estou | 2 - Bloquear a Célula para onde vou
         playerCurrentCell.lock.lock();
         lock.lock();
 
@@ -75,14 +77,19 @@ public class Cell {
                     case 1 -> conquerCastle(this.player, player);
                     case 2 -> conquerCastle(player, this.player);
                 }
-                lock.unlock();
+                //Unlock Lógica
+                //1 - Desbloquear a Célula onde estou | 2 - Desbloquear a Célula para onde eu ia
                 playerCurrentCell.lock.unlock();
+                lock.unlock();
+                
             }else{
                 game.getCell(player.getCurrentCell().getPosition()).removePlayer();
                 player.updatePosition(this.getPosition());
                 this.player = player;
-                playerCurrentCell.lock.unlock();
+                //Unlock Lógica
+                //1 - Desbloquear a Célula onde estou | 2 - Desbloquear a Célula de onde eu vim
                 lock.unlock();
+                playerCurrentCell.lock.unlock();
             }
 
         }finally{
@@ -93,13 +100,12 @@ public class Cell {
     }
 
     public synchronized void removePlayer() {
-        lock.lock();
         player = null;
+        lock.lock();
         try {
             isFull.signal();
         } finally {
             lock.unlock();
-            game.notifyChange();
         }
     }
 
@@ -114,14 +120,13 @@ public class Cell {
         }
     }
 
-    private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer) {
+    private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer) throws InterruptedException {
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());
         defeatPlayer.interrupt();
         if(winnerPlayer.getCurrentStrength()>= (byte) 10){
             winnerPlayer.interrupt();
         }
-        game.notifyChange();
     }
 
 }
