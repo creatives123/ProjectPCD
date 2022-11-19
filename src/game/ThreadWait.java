@@ -17,7 +17,7 @@ public class ThreadWait extends Thread {
     public void run() {
         try {
             sleep(2000);
-            System.out.println("Jogador: " + this.player.getCurrentCell().getPosition() + " parado a mais de 2 segundos");
+            //System.out.println("Jogador: " + this.player.getCurrentCell().getPosition() + " parado a mais de 2 segundos");
             this.player.interrupt();
         } catch (InterruptedException ignored) {}
     }

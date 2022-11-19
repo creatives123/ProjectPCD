@@ -88,7 +88,7 @@ public class Game extends Observable {
                 player.join();
             }
 
-        } catch (InterruptedException ignore) {
+        } catch (InterruptedException e) {
         }
     }
 

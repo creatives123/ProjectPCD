@@ -123,11 +123,7 @@ public class Cell {
     private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer){
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());
-        try {
-            defeatPlayer.interrupt();
-        } catch (Exception e) {
-            System.out.println(defeatPlayer.getIDPlayer() + " Foi morto");
-        }
+        defeatPlayer.interrupt();
         
     }
 
