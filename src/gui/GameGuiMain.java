@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 import game.Game;
 import game.PhoneyHumanPlayer;
@@ -15,6 +16,7 @@ public class GameGuiMain implements Observer {
 	private final JFrame frame = new JFrame("pcd.io");
 	private BoardJComponent boardGui;
 	private Game game;
+
 	//RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
 
 
@@ -42,7 +44,6 @@ public class GameGuiMain implements Observer {
 		game.addBots();
 
 		System.out.println("\n #### 3 vencedores encontrados #### \n");
-
 
 	}
 

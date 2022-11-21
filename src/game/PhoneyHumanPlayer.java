@@ -1,6 +1,7 @@
 package game;
 
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 import environment.Cell;
 import environment.Coordinate;
@@ -16,8 +17,8 @@ public class PhoneyHumanPlayer extends Player {
 	int initialstrenght;
 
 
-	public PhoneyHumanPlayer(int id, Game game, byte strength) {
-		super(id, game, strength);
+	public PhoneyHumanPlayer(int id, Game game, byte strength, CountDownLatch cdl) {
+		super(id, game, strength, cdl);
 		initialstrenght = (int) strength;
 	}
 

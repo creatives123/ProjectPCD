@@ -4,6 +4,7 @@ package game;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -11,6 +12,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import environment.Cell;
 import environment.Coordinate;
+
+import javax.swing.border.Border;
 
 public class Game extends Observable {
 
@@ -27,10 +30,13 @@ public class Game extends Observable {
 
 
     private final AtomicInteger totalWinners = new AtomicInteger(0);
+    private Boolean winner = false;
     protected Cell[][] board;
     Random randomGenerator = new Random();
     private static final int MAXBOTS = 100;
     private LinkedList<Player> listBots = new LinkedList<>();
+    CountDownLatch cdl = new CountDownLatch(3);
+
 
     public Game() {
         board = new Cell[Game.DIMX][Game.DIMY];
@@ -53,9 +59,9 @@ public class Game extends Observable {
         notifyObservers();
 
         // Ao haver vencedore termina todos os players
-        if (Winners()){
+        /*if (Winners()){
             terminateAll();
-        }
+        }*/
     }
 
     public Cell getRandomCell() {
@@ -70,7 +76,7 @@ public class Game extends Observable {
 
     public boolean Winners() {
         // Saber se ja temos vencedores
-        return totalWinners.get() == 20;
+        return winner;
     }
 
     public void addBots(){
@@ -79,16 +85,18 @@ public class Game extends Observable {
             for (int i = 1; i <= MAXBOTS; i++ ){
                 // RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
                 int rand = randomGenerator.nextInt(3) + 1;
-                Player player = new PhoneyHumanPlayer(i, this, (byte)(rand));
+                Player player = new PhoneyHumanPlayer(i, this, (byte)(rand), cdl);
                 listBots.add(player);
                 player.start();
             }
 
+            cdl.await();
+            winner = true;
             for(Player player: listBots){
-                player.join();
+                player.interrupt();
             }
 
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 

@@ -6,6 +6,7 @@ import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -29,13 +30,15 @@ public abstract class Player extends Thread implements Comparable<Player>  {
 	public void updatePosition(Coordinate at){
 		posicao = at;
 	}
+	CountDownLatch cdl;
 
-	public Player(int id, Game game, byte strength) {
+	public Player(int id, Game game, byte strength, CountDownLatch cdl) {
 		super();
 		this.id = id;
 		this.game=game;
 		currentStrength=strength;
 		originalStrength=strength;
+		this.cdl = cdl;
 	}
 
 	public int getIDPlayer(){
@@ -64,7 +67,7 @@ public abstract class Player extends Thread implements Comparable<Player>  {
 		if (newStrenght >= 10){
 			this.currentStrength = (byte) 10;
 			this.interrupt();
-			game.updateWinners();
+			cdl.countDown();
 		}else {
 			this.currentStrength = (byte) newStrenght;
 		}
