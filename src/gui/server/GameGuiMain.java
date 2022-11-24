@@ -1,14 +1,10 @@
-package gui;
+package gui.server;
 
-import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
 import game.Game;
-import game.PhoneyHumanPlayer;
-import game.Player;
+import gui.BoardJComponent;
 
 import javax.swing.JFrame;
 
