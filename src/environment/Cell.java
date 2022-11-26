@@ -17,7 +17,7 @@ public class Cell {
 
     private Lock lock = new ReentrantLock();
     public Condition isEmpty = lock.newCondition();
-    private Condition isFull = lock.newCondition();
+    public Condition isFull = lock.newCondition();
 
     public Cell(Coordinate position, Game g) {
         super();
@@ -44,10 +44,18 @@ public class Cell {
         lock.lock();
         try {
             while (this.isOcupied()) {
-                System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + this.getPosition() + " Ocupada pelo " + this.getPlayer().getIDPlayer() + "\n");
-                isFull.await();
+                if(this.getPlayer().isActive()){
+                    System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + this.getPosition() + " Ocupada pelo " + this.getPlayer().getIDPlayer() + "\n");
+                    isFull.await();
+                }
+                else{
+                    System.out.print("Sou o " + player.getIDPlayer() + " e vou ser realocado \n" );
+                    player.interrupt();
+                    throw new InterruptedException();
+                }
+                
             }
-            System.out.println("Player " + player.getIDPlayer() + " fui posto na celula");
+            //System.out.println("Player " + player.getIDPlayer() + " fui posto na celula" + this.getPosition());
             player.updatePosition(this.getPosition());
             this.player = player;
         } finally {
@@ -123,8 +131,7 @@ public class Cell {
     private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer){
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());
-        defeatPlayer.interrupt();
-        
+       
     }
 
 }

@@ -6,6 +6,7 @@ import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
 
+import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author luismota
  *
  */
-public abstract class Player extends Thread implements Comparable<Player>  {
+public abstract class Player extends Thread implements Comparable<Player>,Serializable  {
 	protected  Game game;
 	private final int id;
 	private byte currentStrength;
@@ -38,7 +39,6 @@ public abstract class Player extends Thread implements Comparable<Player>  {
 		this.game=game;
 		currentStrength=strength;
 		originalStrength=strength;
-		this.cdl = cdl;
 	}
 
 	public int getIDPlayer(){
@@ -64,12 +64,14 @@ public abstract class Player extends Thread implements Comparable<Player>  {
 
 	public void updateStrenght(byte value){
 		int newStrenght = this.currentStrength + value;
-		if (newStrenght >= 10){
+		this.currentStrength = (byte) newStrenght;
+		if(this.currentStrength >= (byte) 10){
 			this.currentStrength = (byte) 10;
 			this.interrupt();
-			cdl.countDown();
-		}else {
-			this.currentStrength = (byte) newStrenght;
+			game.cdl.countDown();
+		}else if(this.currentStrength <= (byte) 0){
+			this.interrupt();
+			this.getCurrentCell().isFull.signal();
 		}
 	}
 
@@ -80,6 +82,8 @@ public abstract class Player extends Thread implements Comparable<Player>  {
 
 	@Override
 	public abstract void run();
+
+	public abstract void setinitialposition();
 
 	@Override
 	public String toString() {

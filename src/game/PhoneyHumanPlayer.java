@@ -17,8 +17,8 @@ public class PhoneyHumanPlayer extends Player {
 	int initialstrenght;
 
 
-	public PhoneyHumanPlayer(int id, Game game, byte strength, CountDownLatch cdl) {
-		super(id, game, strength, cdl);
+	public PhoneyHumanPlayer(int id, Game game, byte strength) {
+		super(id, game, strength);
 		initialstrenght = (int) strength;
 	}
 
@@ -26,13 +26,25 @@ public class PhoneyHumanPlayer extends Player {
 		return false;
 	}
 
-	@Override
-	public void run() {
+	public void setinitialposition(){
+		
 		try {
 			Cell initialPos=game.getRandomCell();
 			initialPos.setPlayer(this);
-		} catch (InterruptedException ignore) {
+		} catch (InterruptedException e) {}
+
+		if (this.isInterrupted()){
+			System.out.println("Entrei aqui");
+			setinitialposition();	
 		}
+
+		
+
+	}
+
+	@Override
+	public void run() {
+		setinitialposition();
 
 		// O bot só executa enquanto o currentStrenght estiver entre ]0; 10[ e o jogo não tiver vencedores
 		while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != 10 && !game.Winners()){
@@ -59,7 +71,7 @@ public class PhoneyHumanPlayer extends Player {
 
 		}
 
-		System.out.println("Fui morto" + this.getIDPlayer());
+		//System.out.println("Fui morto" + this.getIDPlayer());
 	}
 
 	@Override
