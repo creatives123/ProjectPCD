@@ -1,10 +1,12 @@
 package gui.server;
 
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
 import game.Game;
 import gui.BoardJComponent;
+import multiplayer.Server;
 
 import javax.swing.JFrame;
 
@@ -16,13 +18,15 @@ public class GameGuiMain implements Observer {
 	//RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
 
 
-	public GameGuiMain() {
+	public GameGuiMain() throws IOException {
 		super();
 		game = new Game();
 		game.addObserver(this);
 
 		buildGui();
 
+		Server server = new Server(game);
+		server.start();
 	}
 
 	private void buildGui() {
@@ -48,7 +52,7 @@ public class GameGuiMain implements Observer {
 		boardGui.repaint();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		GameGuiMain game = new GameGuiMain();
 		game.init();
 	}

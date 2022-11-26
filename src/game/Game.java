@@ -1,19 +1,15 @@
 package game;
 
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import environment.Cell;
 import environment.Coordinate;
-
-import javax.swing.border.Border;
 
 public class Game extends Observable {
 
@@ -33,18 +29,17 @@ public class Game extends Observable {
     private Boolean winner = false;
     protected Cell[][] board;
     Random randomGenerator = new Random();
-    private static final int MAXBOTS = 100;
-    private LinkedList<Player> listBots = new LinkedList<>();
-    CountDownLatch cdl = new CountDownLatch(3);
+    private static final int MAXBOTS = 5;
+    public LinkedList<Player> listPlayers = new LinkedList<>();
+    public CountDownLatch cdl = new CountDownLatch(3);
 
 
-    public Game() {
+    public Game() throws IOException {
         board = new Cell[Game.DIMX][Game.DIMY];
 
         for (int x = 0; x < Game.DIMX; x++)
             for (int y = 0; y < Game.DIMY; y++)
                 board[x][y] = new Cell(new Coordinate(x, y), this);
-
     }
 
     public Cell getCell(Coordinate at) {
@@ -85,14 +80,14 @@ public class Game extends Observable {
             for (int i = 1; i <= MAXBOTS; i++ ){
                 // RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
                 int rand = randomGenerator.nextInt(3) + 1;
-                Player player = new PhoneyHumanPlayer(i, this, (byte)(rand), cdl);
-                listBots.add(player);
+                Player player = new PhoneyHumanPlayer(i, this, (byte)(rand));
+                listPlayers.add(player);
                 player.start();
             }
 
             cdl.await();
             winner = true;
-            for(Player player: listBots){
+            for(Player player: listPlayers){
                 player.interrupt();
             }
 
@@ -102,7 +97,7 @@ public class Game extends Observable {
 
     private void terminateAll(){
         // terminar todos os jogadores
-        for (Player player: listBots){
+        for (Player player: listPlayers){
             player.interrupt();
         }
     }
