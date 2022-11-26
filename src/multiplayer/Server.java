@@ -8,6 +8,7 @@ import game.PlayerMinimal;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
 
 
 public class Server extends Thread implements Serializable {
@@ -30,32 +31,18 @@ public class Server extends Thread implements Serializable {
         public void run() {
             try {
                 serve();
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 // TODO Tratar da exceção quando a ligação é terminada.. talvez meter o player morto?
                 System.out.println("Ligação terminada");
             }
         }
         private ObjectOutputStream out;
 
-       /* void doConnections(Socket socket) throws IOException {
-            out = new ObjectOutputStream ( socket . getOutputStream ());
-            in = new ObjectInputStream( socket . getInputStream ());
-        }*/
-
-        private void serve() throws IOException, ClassNotFoundException {
-
-            if (!mapSent) {
-                //TODO Enviar o mapa incial
-                sendPlayers(socket);
-                mapSent = true;
-            }
+        private void serve() throws IOException, ClassNotFoundException, InterruptedException {
 
             while (true) {
-                String str = get();
-                if (str.equals("FIM"))
-                    break;
-                System.out.println("Eco:" + str);
-                put(str);
+                sendPlayers(socket);
+                sleep(Game.REFRESH_INTERVAL);
             }
         }
 
@@ -82,7 +69,11 @@ public class Server extends Thread implements Serializable {
             try {
                 OutputStream oStream = socket.getOutputStream();
                 ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
-                ooStream.writeObject(new PlayerMinimal(player));
+                LinkedList<PlayerMinimal> minimals = new LinkedList<>();
+                for (Player player: game.listPlayers){
+                    minimals.add(new PlayerMinimal(player));
+                }
+                ooStream.writeObject(minimals);
             } catch (IOException e) {
                 e.printStackTrace();
             }

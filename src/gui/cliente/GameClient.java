@@ -8,10 +8,13 @@
 package gui.cliente;
 import environment.Coordinate;
 import game.Game;
+import game.PlayerMinimal;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Observable;
 
-public class GameClient {
+public class GameClient extends Observable {
     public static final int DIMY = 30;
     public static final int DIMX = 30;
     protected CellClient[][] board;
@@ -28,5 +31,21 @@ public class GameClient {
         return board[at.x][at.y];
     }
 
-    
+    public void updateBoard(LinkedList<PlayerMinimal> listaplayers) throws InterruptedException {
+        clearBoard();
+        for(PlayerMinimal player: listaplayers){
+            getCell(player.getCurrentCell()).setPlayer(player);
+        }
+    }
+
+    private void clearBoard(){
+        for (int x = 0; x < Game.DIMX; x++)
+            for (int y = 0; y < Game.DIMY; y++)
+                board[x][y].clearPlayer();
+    }
+
+    public void notifyChange() {
+        setChanged();
+        notifyObservers();
+    }
 }

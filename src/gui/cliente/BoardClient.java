@@ -9,8 +9,8 @@ import java.awt.event.KeyListener;
 
 public class BoardClient extends JComponent implements KeyListener {
 	private GameClient game;
-	private Image obstacleImage = new ImageIcon("obstacle.png").getImage();
-	private Image humanPlayerImage= new ImageIcon("abstract-user-flat.png").getImage();
+	private final Image obstacleImage = new ImageIcon("obstacle.png").getImage();
+	private final Image humanPlayerImage= new ImageIcon("abstract-user-flat.png").getImage();
 	private Direction lastPressedDirection=null;
 	
 	public BoardClient(GameClient game) {

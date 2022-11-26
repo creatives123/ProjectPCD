@@ -8,29 +8,36 @@
 package game;
 
 import environment.Coordinate;
+import gui.cliente.CellClient;
 
 import java.io.Serializable;
 
-public class PlayerMinimal extends Player implements Serializable {
+public class PlayerMinimal implements Serializable {
     private byte currentStrength;
     protected byte originalStrength;
     private Coordinate posicao;
     private boolean type;
+    public int id = 1;
 
     public PlayerMinimal (Player player){
-        super(player.getIDPlayer(), null, player.getCurrentStrength());
         currentStrength = player.getCurrentStrength();
         posicao = player.getCurrentCell().getPosition();
         type = player.isHumanPlayer();
     }
 
-    @Override
     public boolean isHumanPlayer() {
         return type;
     }
 
-    @Override
-    public void run() {
+    public byte getCurrentStrength() {
+        return currentStrength;
+    }
 
+    public Coordinate getCurrentCell() {
+        return posicao;
+    }
+
+    public int getIdentification() {
+        return id;
     }
 }

@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,8 +24,9 @@ public class MainClient implements Observer {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private Socket socket;
-    public MainClient() throws IOException, ClassNotFoundException {
+    public MainClient() throws IOException, ClassNotFoundException, InterruptedException {
         buildGui();
+        game.addObserver(this);
         init();
 
         connectToServer();
@@ -34,18 +36,18 @@ public class MainClient implements Observer {
         client.runClient(); */
     }
 
-    void connectToServer() throws IOException, ClassNotFoundException {
+    void connectToServer() throws IOException, ClassNotFoundException, InterruptedException {
         InetAddress endereco = InetAddress.getByName(null);
         socket = new Socket(endereco, Server.PORTO);
 
         getPlayers();
     }
 
-    void getPlayers() throws IOException, ClassNotFoundException {
+    void getPlayers() throws IOException, ClassNotFoundException, InterruptedException {
         InputStream iStream = socket.getInputStream();
         ObjectInputStream oiStream = new ObjectInputStream(iStream);
-        PlayerMinimal player = (PlayerMinimal) oiStream.readObject();
-        System.out.println(player);
+        LinkedList<PlayerMinimal> listaPlayers = (LinkedList<PlayerMinimal>) oiStream.readObject();
+        game.updateBoard(listaPlayers);
     }
 
     void put(int i) throws IOException {
@@ -82,19 +84,13 @@ public class MainClient implements Observer {
         boardGui.repaint();
     }
 
-    void sendMessages() throws IOException, ClassNotFoundException {
-        for (int i = 0; i < 10; i++) {
-            put(i);
-            get();
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {//...
-            }
+    void sendMessages() throws IOException, ClassNotFoundException, InterruptedException {
+        while (true){
+            getPlayers();
         }
-        System.out.println("FIM");
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         MainClient game = new MainClient();
     }
 
