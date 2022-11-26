@@ -12,7 +12,7 @@ import java.util.LinkedList;
 
 
 public class Server extends Thread implements Serializable {
-    public class DealWithClient extends Thread {
+    public static class DealWithClient extends Thread {
         Game game;
         Player player;
         private boolean mapSent = false;
@@ -36,7 +36,6 @@ public class Server extends Thread implements Serializable {
                 System.out.println("Ligação terminada");
             }
         }
-        private ObjectOutputStream out;
 
         private void serve() throws IOException, ClassNotFoundException, InterruptedException {
 
@@ -78,8 +77,6 @@ public class Server extends Thread implements Serializable {
                 e.printStackTrace();
             }
         }
-
-
     }
     public static final int PORTO = 8080;
     public Game game;
