@@ -33,7 +33,7 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	}
 	CountDownLatch cdl;
 
-	public Player(int id, Game game, byte strength, CountDownLatch cdl) {
+	public Player(int id, Game game, byte strength) {
 		super();
 		this.id = id;
 		this.game=game;
