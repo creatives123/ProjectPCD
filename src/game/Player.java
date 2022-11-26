@@ -83,7 +83,17 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	@Override
 	public abstract void run();
 
-	public abstract void setinitialposition();
+	public void setinitialposition(){
+		try {
+			Cell initialPos=game.getRandomCell();
+			initialPos.setPlayer(this);
+		} catch (InterruptedException e) {}
+
+		if (this.isInterrupted()){
+			System.out.println("Entrei aqui");
+			setinitialposition();
+		}
+	}
 
 	@Override
 	public String toString() {

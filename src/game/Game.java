@@ -46,6 +46,8 @@ public class Game extends Observable {
         return board[at.x][at.y];
     }
 
+
+
     /**
      * Updates GUI. Should be called anytime the game state changes
      */

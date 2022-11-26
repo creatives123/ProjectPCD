@@ -27,4 +27,6 @@ public class GameClient {
     public CellClient getCell(Coordinate at) {
         return board[at.x][at.y];
     }
+
+    
 }

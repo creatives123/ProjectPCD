@@ -26,22 +26,6 @@ public class PhoneyHumanPlayer extends Player {
 		return false;
 	}
 
-	public void setinitialposition(){
-		
-		try {
-			Cell initialPos=game.getRandomCell();
-			initialPos.setPlayer(this);
-		} catch (InterruptedException e) {}
-
-		if (this.isInterrupted()){
-			System.out.println("Entrei aqui");
-			setinitialposition();	
-		}
-
-		
-
-	}
-
 	@Override
 	public void run() {
 		setinitialposition();
