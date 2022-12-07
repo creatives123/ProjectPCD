@@ -7,6 +7,7 @@
  */
 package gui.cliente;
 
+import environment.Direction;
 import game.PlayerMinimal;
 import multiplayer.Server;
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class MainClient implements Observer {
 
         connectToServer();
 
-        sendMessages();
+        playgame();
         /* Cliente client = new Cliente(game);
         client.runClient(); */
     }
@@ -39,8 +40,6 @@ public class MainClient implements Observer {
     void connectToServer() throws IOException, ClassNotFoundException, InterruptedException {
         InetAddress endereco = InetAddress.getByName(null);
         socket = new Socket(endereco, Server.PORTO);
-
-        getPlayers();
     }
 
     void getPlayers() throws IOException, ClassNotFoundException, InterruptedException {
@@ -50,10 +49,10 @@ public class MainClient implements Observer {
         game.updateBoard(listaPlayers);
     }
 
-    void put(int i) throws IOException {
+    void put(Direction direction) throws IOException {
         OutputStream oStream = socket.getOutputStream();
-        ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
-        ooStream.writeObject(("Ola " + i));
+        PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
+        ooStream.println(direction);
     }
 
     void get(){
@@ -81,12 +80,20 @@ public class MainClient implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+
         boardGui.repaint();
     }
 
-    void sendMessages() throws IOException, ClassNotFoundException, InterruptedException {
+    void playgame() throws IOException, ClassNotFoundException, InterruptedException {
         while (true){
             getPlayers();
+
+            if (boardGui.getLastPressedDirection() != null)
+                System.out.println( boardGui.getLastPressedDirection());
+            put(boardGui.getLastPressedDirection());
+            boardGui.clearLastPressedDirection();
+
+
         }
     }
 

@@ -28,6 +28,10 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 		return game.getCell(posicao);
 	}
 
+	public Coordinate getPosicao(){
+		return posicao;
+	}
+
 	public void updatePosition(Coordinate at){
 		posicao = at;
 	}
