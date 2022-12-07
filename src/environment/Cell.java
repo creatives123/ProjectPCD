@@ -67,7 +67,7 @@ public class Cell {
 
     public synchronized void movePlayer(Player player) throws InterruptedException {
        
-        if(this.isOcupied() && !this.player.isActive() && !this.player.isHumanPlayer()) {
+        if(this.isOcupied() && !this.player.isActive()) {
             // Em caso um bot tentar mover-se para uma celula com um jogador morto ou vencedor fica a espera
             // Esta espera vai ser interrompida com uma sub thread que fica a espera 2 segundos no player
             wait();
