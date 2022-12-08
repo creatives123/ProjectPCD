@@ -72,7 +72,11 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 			this.getCurrentCell().isFull.signal();
 		}
 	}
-
+	public synchronized void killPlayer(){
+		currentStrength = (byte) 0;
+		this.interrupt();
+		game.notifyChange();
+	}
 	public boolean isActive(){
 		// Retorna se o jogador ainda está ativo no jogo
 		return getCurrentStrength() > 0 && getCurrentStrength() < 10;

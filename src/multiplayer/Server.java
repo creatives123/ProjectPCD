@@ -40,6 +40,11 @@ public class Server extends Thread implements Serializable {
                 serve();
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 // TODO Tratar da exceção quando a ligação é terminada.. talvez meter o player morto?
+                synchronized(this) {
+                    player.killPlayer();
+                    System.out.println(player.isActive());
+                    System.out.println(player.isAlive());
+                }
                 System.out.println("Ligação terminada");
             }
         }
@@ -52,11 +57,6 @@ public class Server extends Thread implements Serializable {
 
                 // verifica se recebeu uma mudança de direção
                 Coordinate direction = getDirection();
-                try {
-                    TimeUnit.MILLISECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 // TODO remover pois era só para ver se recebia a nova direção
                 if (direction != null) {
                     System.out.println(direction);
@@ -66,39 +66,31 @@ public class Server extends Thread implements Serializable {
             }
         }
 
-        Coordinate getDirection(){
+        Coordinate getDirection() throws IOException{
             // Verifica se na socket existe algo para ler
-            try {
-                InputStream iStream = socket.getInputStream();
-                BufferedReader oiStream = new BufferedReader(new InputStreamReader(iStream));
-                // le o que está na socket
-                String value = oiStream.readLine();
-                // Verifica se o valor que recebe é diferente de null,
-                // se for então retorna a coordenada que recebeu.
-                if (!Objects.equals(value, "null"))
-                    return Direction.valueOf(value).getVector();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            InputStream iStream = socket.getInputStream();
+            BufferedReader oiStream = new BufferedReader(new InputStreamReader(iStream));
+            // le o que está na socket
+            String value = oiStream.readLine();
+            // Verifica se o valor que recebe é diferente de null,
+            // se for então retorna a coordenada que recebeu.
+            if (!Objects.equals(value, "null"))
+                return Direction.valueOf(value).getVector();
             return null;
         }
 
         private void sendPlayers(Socket socket) throws IOException {
             // Envia uma lista de PlayerMinimal que contem só os dados necessários para a leitura do cliente.
-            try {
-                OutputStream oStream = socket.getOutputStream();
-                ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
-                // cria nova lista de minimals
-                LinkedList<PlayerMinimal> minimals = new LinkedList<>();
-                for (Player player: game.listPlayers){
-                    minimals.add(new PlayerMinimal(player));
-                }
-
-                // envia a lista para o cliente
-                ooStream.writeObject(minimals);
-            } catch (IOException e) {
-                e.printStackTrace();
+            OutputStream oStream = socket.getOutputStream();
+            ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
+            // cria nova lista de minimals
+            LinkedList<PlayerMinimal> minimals = new LinkedList<>();
+            for (Player player: game.listPlayers){
+                minimals.add(new PlayerMinimal(player));
             }
+
+            // envia a lista para o cliente
+            ooStream.writeObject(minimals);
         }
     }
     public static final int PORTO = 8080;

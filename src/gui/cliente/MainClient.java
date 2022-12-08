@@ -25,28 +25,35 @@ public class MainClient implements Observer {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private Socket socket;
-    public MainClient() throws IOException, ClassNotFoundException, InterruptedException {
-        buildGui();
-        game.addObserver(this);
-        init();
+    private String IP;
+    private int porto;
+    public MainClient(String IP, int porto) throws IOException, ClassNotFoundException, InterruptedException {
+        this.IP = IP;
+        this.porto = porto;
+        try {
+            buildGui();
+            game.addObserver(this);
 
-        connectToServer();
+            connectToServer();
 
-        playgame();
-        /* Cliente client = new Cliente(game);
-        client.runClient(); */
+            playGame();
+        }catch (IOException | ClassNotFoundException | InterruptedException ignore){
+            // TODO Verficar o que devemos fazr aqui
+            System.out.println("Jogo Terminado");
+        }
+
     }
 
     void connectToServer() throws IOException, ClassNotFoundException, InterruptedException {
-        InetAddress endereco = InetAddress.getByName(null);
-        socket = new Socket(endereco, Server.PORTO);
+        InetAddress address = InetAddress.getByName(IP);
+        socket = new Socket(address, Server.PORTO);
     }
 
     void getPlayers() throws IOException, ClassNotFoundException, InterruptedException {
         InputStream iStream = socket.getInputStream();
         ObjectInputStream oiStream = new ObjectInputStream(iStream);
-        LinkedList<PlayerMinimal> listaPlayers = (LinkedList<PlayerMinimal>) oiStream.readObject();
-        game.updateBoard(listaPlayers);
+        LinkedList<PlayerMinimal> listPlayers = (LinkedList<PlayerMinimal>) oiStream.readObject();
+        game.updateBoard(listPlayers);
     }
 
     void put(Direction direction) throws IOException {
@@ -55,20 +62,6 @@ public class MainClient implements Observer {
         ooStream.println(direction);
     }
 
-    void get(){
-        try {
-            InputStream iStream = socket.getInputStream();
-            ObjectInputStream oiStream = new ObjectInputStream(iStream);
-            String str = (String) oiStream.readObject();
-            System.out.println(str);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void init() {
-        frame.setVisible(true);
-    }
     private void buildGui() {
         boardGui = new BoardClient(game);
         frame.add(boardGui);
@@ -76,6 +69,7 @@ public class MainClient implements Observer {
         frame.setSize(800,800);
         frame.setLocation(0, 150);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
     }
 
     @Override
@@ -84,21 +78,22 @@ public class MainClient implements Observer {
         boardGui.repaint();
     }
 
-    void playgame() throws IOException, ClassNotFoundException, InterruptedException {
+    void playGame() throws IOException, ClassNotFoundException, InterruptedException {
         while (true){
+
             getPlayers();
 
-            if (boardGui.getLastPressedDirection() != null)
-                System.out.println( boardGui.getLastPressedDirection());
+            // Envia a tecla que foi pressionada
             put(boardGui.getLastPressedDirection());
             boardGui.clearLastPressedDirection();
-
 
         }
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        MainClient game = new MainClient();
+
+        MainClient game = new MainClient("localhost", 8080);
+
     }
 
 }
