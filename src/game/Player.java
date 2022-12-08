@@ -51,14 +51,8 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	public abstract boolean isHumanPlayer();
 
 	public void move(Coordinate direction) throws InterruptedException {
-		Coordinate nextposition = this.getCurrentCell().getPosition().translate(direction);
-		while(nextposition.x > 29 || nextposition.x < 0 || nextposition.y < 0 || nextposition.y > 29){
-			nextposition = this.getCurrentCell().getPosition().translate(Direction.random().getVector());
-		}
-		Cell newCell = game.getCell(nextposition);
-
-		newCell.movePlayer(this);
-	
+		Cell newCell = game.getCell(direction);
+		newCell.movePlayer(this);	
 	}
 
 	/*

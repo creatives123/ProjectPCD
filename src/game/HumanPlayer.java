@@ -20,8 +20,11 @@ public class HumanPlayer extends Player {
 
     @Override
     public void move(Coordinate direction) throws InterruptedException {
-        System.out.println(direction);
-        super.move(direction);
+        Coordinate nextposition = this.getCurrentCell().getPosition().translate(direction);
+		if(nextposition.x <= 29 && nextposition.x >= 0 && nextposition.y >= 0 && nextposition.y <= 29){
+			super.move(nextposition);
+		}
+		return;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class PhoneyHumanPlayer extends Player {
 
 				threadwait.start();
 
-				move(Direction.random().getVector());
+				move(generatedirection());
 				// move foi com sucesso então terminamos
 				threadwait.interrupt();
 
@@ -56,6 +56,14 @@ public class PhoneyHumanPlayer extends Player {
 		}
 
 		//System.out.println("Fui morto" + this.getIDPlayer());
+	}
+
+	public Coordinate generatedirection(){
+		Coordinate nextposition = this.getCurrentCell().getPosition().translate(Direction.random().getVector());
+		while(nextposition.x > 29 || nextposition.x < 0 || nextposition.y < 0 || nextposition.y > 29){
+			nextposition = this.getCurrentCell().getPosition().translate(Direction.random().getVector());
+		}
+		return nextposition;
 	}
 
 	@Override
