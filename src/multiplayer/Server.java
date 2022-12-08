@@ -58,7 +58,6 @@ public class Server extends Thread implements Serializable {
                 Coordinate direction = getDirection();
                 // TODO remover pois era só para ver se recebia a nova direção
                 if (direction != null) {
-                    System.out.println(direction);
                     player.move(direction);
                 }
 
@@ -84,6 +83,7 @@ public class Server extends Thread implements Serializable {
             PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
             if(!player.isActive()) {
                 ooStream.println("dead");
+                this.interrupt();
             }else{
                 ooStream.println("alive");
             }
