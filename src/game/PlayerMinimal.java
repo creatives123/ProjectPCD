@@ -1,14 +1,6 @@
-/**
- * Created by Alexandre Torres on IntelliJ IDEA.
- * Date: 25/11/2022
- * Time: 00:02
- * <p>
- * Details of the file:
- */
 package game;
 
 import environment.Coordinate;
-import gui.cliente.CellClient;
 
 import java.io.Serializable;
 

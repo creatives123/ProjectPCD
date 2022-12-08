@@ -15,6 +15,7 @@ public class Game extends Observable {
 
     public static final int DIMY = 30;
     public static final int DIMX = 30;
+    public static final int MAXLIFE = 10;
     private static final int NUM_PLAYERS = 90;
     private static final int NUM_FINISHED_PLAYERS_TO_END_GAME = 3;
 
@@ -22,7 +23,6 @@ public class Game extends Observable {
     public static final double MAX_INITIAL_STRENGTH = 3;
     public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
     public static final long INITIAL_WAITING_TIME = 10000;
-    //Tentativa de um Lock
 
 
     private final AtomicInteger totalWinners = new AtomicInteger(0);
@@ -31,7 +31,7 @@ public class Game extends Observable {
     Random randomGenerator = new Random();
     private static final int MAXBOTS = 5;
     public LinkedList<Player> listPlayers = new LinkedList<>();
-    public CountDownLatch cdl = new CountDownLatch(3);
+    public CountDownLatch cdl = new CountDownLatch(NUM_FINISHED_PLAYERS_TO_END_GAME);
 
 
     public Game() throws IOException {
@@ -55,10 +55,6 @@ public class Game extends Observable {
         setChanged();
         notifyObservers();
 
-        // Ao haver vencedore termina todos os players
-        /*if (Winners()){
-            terminateAll();
-        }*/
     }
 
     public Cell getRandomCell() {
@@ -66,7 +62,7 @@ public class Game extends Observable {
     }
 
     public void updateWinners() {
-        // incrementa sempre que um jogador chega a 10
+        // incrementa sempre que um jogador chega a MAXLIFE
         totalWinners.incrementAndGet();
         System.out.println("Winner Count: " + totalWinners.get());
     }
@@ -97,10 +93,4 @@ public class Game extends Observable {
         }
     }
 
-    private void terminateAll(){
-        // terminar todos os jogadores
-        for (Player player: listPlayers){
-            player.interrupt();
-        }
-    }
 }

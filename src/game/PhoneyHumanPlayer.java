@@ -1,9 +1,5 @@
 package game;
 
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-
-import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
 
@@ -13,7 +9,7 @@ import environment.Direction;
  *
  */
 public class PhoneyHumanPlayer extends Player {
-	//Variável para guardar a força com qual o player começa. Importante para o move
+	//Variável para guardar a força com qual o player começa.
 	int initialstrenght;
 
 
@@ -31,7 +27,7 @@ public class PhoneyHumanPlayer extends Player {
 		setinitialposition();
 
 		// O bot só executa enquanto o currentStrenght estiver entre ]0; 10[ e o jogo não tiver vencedores
-		while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != 10 && !game.Winners()){
+		while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != Game.MAXLIFE && !game.Winners()){
 
 			// move do bot
 			// Criamos uma thread de wait para prevenir que o bot fique parado eternamente.
@@ -44,23 +40,18 @@ public class PhoneyHumanPlayer extends Player {
 				// move foi com sucesso então terminamos
 				threadwait.interrupt();
 
-				//Thread.sleep((long) ((Math.random() + 1)) * getIDPlayer() * 1000);
 				//Multiplicamos o REFRESH_INTERVAL pelo initialstrenght para diferenciar os ciclos de movimento
 				Thread.sleep(Game.REFRESH_INTERVAL * initialstrenght);
 			} catch (InterruptedException e) {
 				threadwait.interrupt();
 			}
 
-
-
 		}
-
-		//System.out.println("Fui morto" + this.getIDPlayer());
 	}
 
 	public Coordinate generatedirection(){
 		Coordinate nextposition = this.getCurrentCell().getPosition().translate(Direction.random().getVector());
-		while(nextposition.x > 29 || nextposition.x < 0 || nextposition.y < 0 || nextposition.y > 29){
+		while(nextposition.x > Game.DIMX -1 || nextposition.x < 0 || nextposition.y < 0 || nextposition.y > Game.DIMY -1){
 			nextposition = this.getCurrentCell().getPosition().translate(Direction.random().getVector());
 		}
 		return nextposition;

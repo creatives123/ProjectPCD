@@ -1,21 +1,11 @@
 package game;
 
-
-
 import environment.Cell;
 import environment.Coordinate;
-import environment.Direction;
 
 import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Represents a player.
- * @author luismota
- *
- */
 public abstract class Player extends Thread implements Comparable<Player>,Serializable  {
 	protected  Game game;
 	private final int id;
@@ -55,16 +45,11 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 		newCell.movePlayer(this);	
 	}
 
-	/*
-	public void updateStrenght(byte value){
-		this.currentStrength += value;
-	}*/
-
 	public void updateStrenght(byte value){
 		int newStrenght = this.currentStrength + value;
 		this.currentStrength = (byte) newStrenght;
-		if(this.currentStrength >= (byte) 10){
-			this.currentStrength = (byte) 10;
+		if(this.currentStrength >= (byte) Game.MAXLIFE){
+			this.currentStrength = (byte) Game.MAXLIFE;
 			this.interrupt();
 			game.cdl.countDown();
 		}else if(this.currentStrength <= (byte) 0){
@@ -79,7 +64,7 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	}
 	public boolean isActive(){
 		// Retorna se o jogador ainda está ativo no jogo
-		return getCurrentStrength() > 0 && getCurrentStrength() < 10;
+		return getCurrentStrength() > 0 && getCurrentStrength() < Game.MAXLIFE;
 	}
 
 	@Override
@@ -92,7 +77,6 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 		} catch (InterruptedException e) {}
 
 		if (this.isInterrupted()){
-			System.out.println("Entrei aqui");
 			setinitialposition();
 		}
 	}

@@ -39,7 +39,6 @@ public class Cell {
         return player;
     }
 
-    //TODO Coloca o jogador (bot e humano) dentro do jogo
     public void setPlayer(Player player) throws InterruptedException {
         lock.lock();
         try {
