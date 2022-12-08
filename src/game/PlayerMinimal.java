@@ -17,9 +17,10 @@ public class PlayerMinimal implements Serializable {
     protected byte originalStrength;
     private Coordinate posicao;
     private boolean type;
-    public int id = 1;
+    public int id;
 
     public PlayerMinimal (Player player){
+        id = player.getIDPlayer();
         currentStrength = player.getCurrentStrength();
         posicao = player.getCurrentCell().getPosition();
         type = player.isHumanPlayer();

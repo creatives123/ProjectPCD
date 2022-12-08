@@ -42,8 +42,6 @@ public class Server extends Thread implements Serializable {
                 // TODO Tratar da exceção quando a ligação é terminada.. talvez meter o player morto?
                 synchronized(this) {
                     player.killPlayer();
-                    System.out.println(player.isActive());
-                    System.out.println(player.isAlive());
                 }
                 System.out.println("Ligação terminada");
             }
@@ -55,6 +53,7 @@ public class Server extends Thread implements Serializable {
                 // envia a lista actual dos jogadores
                 sendPlayers(socket);
 
+                sendPlayerStatus();
                 // verifica se recebeu uma mudança de direção
                 Coordinate direction = getDirection();
                 // TODO remover pois era só para ver se recebia a nova direção
@@ -62,6 +61,7 @@ public class Server extends Thread implements Serializable {
                     System.out.println(direction);
                     player.move(direction);
                 }
+
                 sleep(Game.REFRESH_INTERVAL);
             }
         }
@@ -77,6 +77,17 @@ public class Server extends Thread implements Serializable {
             if (!Objects.equals(value, "null"))
                 return Direction.valueOf(value).getVector();
             return null;
+        }
+
+        public void sendPlayerStatus() throws IOException {
+            OutputStream oStream = socket.getOutputStream();
+            PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
+            if(!player.isActive()) {
+                ooStream.println("dead");
+            }else{
+                ooStream.println("alive");
+            }
+
         }
 
         private void sendPlayers(Socket socket) throws IOException {

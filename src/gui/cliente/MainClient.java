@@ -15,11 +15,12 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
 public class MainClient implements Observer {
-    private final JFrame frame = new JFrame("asdsad");
+    private final JFrame frame = new JFrame("Cliente");
     private BoardClient boardGui;
     private GameClient game = new GameClient();
     private ObjectInputStream in;
@@ -27,6 +28,8 @@ public class MainClient implements Observer {
     private Socket socket;
     private String IP;
     private int porto;
+    private int playerID;
+    private PlayerMinimal player;
     public MainClient(String IP, int porto) throws IOException, ClassNotFoundException, InterruptedException {
         this.IP = IP;
         this.porto = porto;
@@ -37,9 +40,12 @@ public class MainClient implements Observer {
             connectToServer();
 
             playGame();
-        }catch (IOException | ClassNotFoundException | InterruptedException ignore){
+
+            closeConnection();
+        }catch (IOException | ClassNotFoundException | InterruptedException e){
             // TODO Verficar o que devemos fazr aqui
-            System.out.println("Jogo Terminado");
+            JOptionPane.showMessageDialog(frame, "Ligação ao servidor foi desconectada!",
+                    "Server error!", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -56,11 +62,12 @@ public class MainClient implements Observer {
         game.updateBoard(listPlayers);
     }
 
-    void put(Direction direction) throws IOException {
+    void sendDirection(Direction direction) throws IOException {
         OutputStream oStream = socket.getOutputStream();
         PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
         ooStream.println(direction);
     }
+
 
     private void buildGui() {
         boardGui = new BoardClient(game);
@@ -74,8 +81,11 @@ public class MainClient implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-
         boardGui.repaint();
+    }
+
+    private void closeConnection() throws IOException {
+        socket.close();
     }
 
     void playGame() throws IOException, ClassNotFoundException, InterruptedException {
@@ -83,16 +93,39 @@ public class MainClient implements Observer {
 
             getPlayers();
 
+            if(!checkAlive()){
+                JOptionPane.showMessageDialog(frame, "Jogo Terminado",
+                        "Jogo Terminado!", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            }
+
             // Envia a tecla que foi pressionada
-            put(boardGui.getLastPressedDirection());
+            sendDirection(boardGui.getLastPressedDirection());
             boardGui.clearLastPressedDirection();
 
+
+
         }
+    }
+
+    public boolean checkAlive() throws IOException {
+        // Verifica se na socket existe algo para ler
+        InputStream iStream = socket.getInputStream();
+        BufferedReader oiStream = new BufferedReader(new InputStreamReader(iStream));
+        // le o que está na socket
+        String value = oiStream.readLine();
+        if (Objects.equals(value, "dead")){
+            return false;
+        }
+        return true;
+
+
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
         MainClient game = new MainClient("localhost", 8080);
+
 
     }
 
