@@ -20,6 +20,7 @@ public class HumanPlayer extends Player {
 
     @Override
     public void move(Coordinate direction) throws InterruptedException {
+        System.out.println(direction);
         super.move(direction);
     }
 
@@ -34,7 +35,7 @@ public class HumanPlayer extends Player {
         }
 
         // O bot só executa enquanto o currentStrenght estiver entre ]0; 10[ e o jogo não tiver vencedores
-        while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != 10 && !game.Winners()){
+        while (super.getCurrentStrength() <= 0 && super.getCurrentStrength() >= 10 && !game.Winners()){
             // move do bot
             try{
                 Thread.sleep(1);
