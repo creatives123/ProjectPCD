@@ -72,6 +72,9 @@ public class Cell {
             // Esta espera vai ser interrompida com uma sub thread que fica a espera 2 segundos no player
             wait();
         }
+        else if(this.isOcupied() && !this.player.isActive() && player.isHumanPlayer()){
+            return;
+        }
 
         Cell playerCurrentCell = player.getCurrentCell();
         //Lock Lógica
