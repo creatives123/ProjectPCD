@@ -39,7 +39,7 @@ public class Cell {
         return player;
     }
 
-    //TODO Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
+    //TODO Coloca o jogador (bot e humano) dentro do jogo
     public void setPlayer(Player player) throws InterruptedException {
         lock.lock();
         try {

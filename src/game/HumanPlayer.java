@@ -29,32 +29,7 @@ public class HumanPlayer extends Player {
 
     @Override
     public void run() {
-
-        // TODO trocar isto porque tá igual ao BOT foi só para testar
-        try {
-            Cell initialPos=game.getRandomCell();
-            initialPos.setPlayer(this);
-        } catch (InterruptedException ignore) {
-        }
-
-        // O bot só executa enquanto o currentStrenght estiver entre ]0; 10[ e o jogo não tiver vencedores
-        while (super.getCurrentStrength() <= 0 && super.getCurrentStrength() >= 10 && !game.Winners()){
-            // move do bot
-            try{
-                Thread.sleep(1);
-            } catch (InterruptedException ignore) {
-            }
-
-
-
-        }
-
-        System.out.println("Fui morto" + this.getIDPlayer());
+            setinitialposition();
     }
 
-    @Override
-    public void setinitialposition() {
-        // TODO Auto-generated method stub
-
-    }
 }
