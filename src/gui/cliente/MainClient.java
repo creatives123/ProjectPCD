@@ -103,8 +103,6 @@ public class MainClient implements Observer {
             sendDirection(boardGui.getLastPressedDirection());
             boardGui.clearLastPressedDirection();
 
-
-
         }
     }
 
