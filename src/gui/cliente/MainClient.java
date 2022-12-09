@@ -6,16 +6,9 @@
  * Details of the file:
  */
 package gui.cliente;
-
-import environment.Direction;
-import game.PlayerMinimal;
-import multiplayer.Server;
+import gui.BoardClient;
 import javax.swing.*;
 import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,19 +16,10 @@ public class MainClient implements Observer {
     private final JFrame frame = new JFrame("Cliente");
     private BoardClient boardGui;
     private GameClient game = new GameClient();
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
-    private Socket socket;
-    private String IP;
-    private int porto;
-    private int playerID;
-    private PlayerMinimal player;
     private ClienteCon thread;
-    public MainClient(String IP, int porto) throws IOException, ClassNotFoundException, InterruptedException {
-        this.IP = IP;
-        this.porto = porto;
+    public MainClient(String IP, int porto, boolean alternativeKeys) throws IOException, ClassNotFoundException, InterruptedException {
         try {
-            buildGui();
+            buildGui(alternativeKeys);
             game.addObserver(this);
 
             thread = new ClienteCon(IP, porto, game);
@@ -51,10 +35,9 @@ public class MainClient implements Observer {
             JOptionPane.showMessageDialog(frame, "Ligação ao servidor foi desconectada!",
                     "Server error!", JOptionPane.ERROR_MESSAGE);
         }
-
     }
-    private void buildGui() {
-        boardGui = new BoardClient(game);
+    private void buildGui(boolean alternativeKeys) {
+        boardGui = new BoardClient(game, alternativeKeys);
         frame.add(boardGui);
 
         frame.setSize(800,800);
@@ -71,25 +54,20 @@ public class MainClient implements Observer {
     void playGame() throws IOException, ClassNotFoundException, InterruptedException {
         while (true){
             thread.getPlayers();
-
-
             if(!thread.checkAlive()){
                 JOptionPane.showMessageDialog(frame, "Jogo Terminado",
                         "Jogo Terminado!", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
-
             // Envia a tecla que foi pressionada
             thread.sendDirection(boardGui.getLastPressedDirection());
             boardGui.clearLastPressedDirection();
-
         }
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-        MainClient game = new MainClient("localhost", 8080);
-
+        MainClient game = new MainClient("localhost", 8080 , false);
 
     }
 

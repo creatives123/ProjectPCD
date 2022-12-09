@@ -28,9 +28,7 @@ public class ClienteCon extends Thread {
     public void run() {
         while (true) {
             try {
-
                 sleep(1);
-
             } catch (InterruptedException e) {
                 break;
             }
@@ -46,6 +44,7 @@ public class ClienteCon extends Thread {
     void getPlayers() throws IOException, ClassNotFoundException, InterruptedException {
         InputStream iStream = socket.getInputStream();
         ObjectInputStream oiStream = new ObjectInputStream(iStream);
+        // le a lista de players que recebe do servidor
         LinkedList<PlayerMinimal> listPlayers = (LinkedList<PlayerMinimal>) oiStream.readObject();
         game.updateBoard(listPlayers);
     }
@@ -53,6 +52,7 @@ public class ClienteCon extends Thread {
     void sendDirection(Direction direction) throws IOException {
         OutputStream oStream = socket.getOutputStream();
         PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
+        // Envia como texto a direção
         ooStream.println(direction);
     }
 
