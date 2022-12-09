@@ -24,7 +24,6 @@ public class MainClient implements Observer {
 
             thread = new ClienteCon(IP, porto, game);
             thread.start();
-            //connectToServer();
 
             playGame();
 
@@ -66,7 +65,7 @@ public class MainClient implements Observer {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-
+        // TODO receber parametros para preencher o jogo
         MainClient game = new MainClient("localhost", 8080 , false);
 
     }
