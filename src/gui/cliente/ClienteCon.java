@@ -49,7 +49,7 @@ public class ClienteCon extends Thread {
         game.updateBoard(listPlayers);
     }
 
-    void sendDirection(Direction direction) throws IOException {
+    void sendDirection(String direction) throws IOException {
         OutputStream oStream = socket.getOutputStream();
         PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
         // Envia como texto a direção

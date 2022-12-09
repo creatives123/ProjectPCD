@@ -10,6 +10,7 @@ import game.PlayerMinimal;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -23,26 +24,36 @@ public class Server extends Thread implements Serializable {
         */
 
         Game game;
-        Player player;
+        Player player1;
+        Player player2;
         Socket socket;
+        boolean multiplayer;
 
         public DealWithClient(Socket socket, Game game) throws IOException {
             this.game = game;
             this.socket = socket;
-            player = new HumanPlayer(1, game, (byte) 3);
-            player.start();
-            game.listPlayers.add(player);
         }
         private ObjectInputStream in;
         @Override
         public void run() {
             try {
+                multiplayer = Boolean.parseBoolean(getMultiplayer());
+                player1 = new HumanPlayer(1, game, (byte) 3);
+                player1.start();
+                game.listPlayers.add(player1);
+                if(multiplayer){
+                    player2 = new HumanPlayer(1, game, (byte) 3);
+                    player2.start();
+                    game.listPlayers.add(player2);
+                }
+
+
                 serve();
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 // TODO Tratar da exceção quando a ligação é terminada.. talvez meter o player morto?
-                synchronized(this) {
-                    player.killPlayer();
-                }
+                player1.killPlayer();
+                if(multiplayer)
+                    player2.killPlayer();
                 System.out.println("Ligação terminada");
             }
         }
@@ -55,34 +66,44 @@ public class Server extends Thread implements Serializable {
 
                 sendPlayerStatus();
                 // verifica se recebeu uma mudança de direção
-                Coordinate direction = getDirection();
-                // TODO remover pois era só para ver se recebia a nova direção
-                if (direction != null) {
-                    player.move(direction);
-                }
+                getDirection();
 
-                sleep(Game.REFRESH_INTERVAL);
+                sleep(200);
             }
         }
 
-        Coordinate getDirection() throws IOException{
+        void getDirection() throws IOException, InterruptedException {
             // Verifica se na socket existe algo para ler
             InputStream iStream = socket.getInputStream();
             BufferedReader oiStream = new BufferedReader(new InputStreamReader(iStream));
             // le o que está na socket
             String value = oiStream.readLine();
-            // Verifica se o valor que recebe é diferente de null,
-            // se for então retorna a coordenada que recebeu.
-            if (!Objects.equals(value, "null"))
-                return Direction.valueOf(value).getVector();
-            return null;
+
+            if (!value.equals("null")){
+                String[] arrOfStr = value.split("\\|");
+                if (Objects.equals(arrOfStr[0], "P1")){
+                    System.out.println("Mover Player1");
+                    player1.move(Direction.valueOf(arrOfStr[1]).getVector());
+                }else if(Objects.equals(arrOfStr[0], "P2") && multiplayer){
+                    System.out.println("Mover Player2");
+                    player2.move(Direction.valueOf(arrOfStr[1]).getVector());
+                }
+            }
+        }
+
+        String getMultiplayer() throws IOException{
+            // Verifica se na socket existe algo para ler
+            InputStream iStream = socket.getInputStream();
+            BufferedReader oiStream = new BufferedReader(new InputStreamReader(iStream));
+            // le o que está na socket
+            return oiStream.readLine();
         }
 
         public void sendPlayerStatus() throws IOException {
             OutputStream oStream = socket.getOutputStream();
             PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
-            if(!player.isActive()) {
-                ooStream.println("dead");
+            if(!player1.isActive() && !player2.isActive()) {
+                ooStream.println("end");
                 this.interrupt();
             }else{
                 ooStream.println("alive");
