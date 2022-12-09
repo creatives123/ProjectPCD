@@ -113,75 +113,8 @@ public class MainClient implements Observer {
         socket.close();
     }
 
-    public static void main(String[] args) throws IOException{
-
-        JFrame frame = new JFrame("Welcome to IGE Agario PCD");
-        // para que o botao de fechar a janela termine a aplicacao
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(500,500);
-
-        frame.setLayout(new GridLayout(4, 2));
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
-        int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
-        frame.setLocation(x, y);
-
-        frame.add(new JLabel("Address"));
-        JTextField address = new JTextField();
-        frame.add(address);
-
-        frame.add(new JLabel("Port"));
-        JTextField width = new JTextField();
-        frame.add(width);
-
-        frame.add(new JLabel("Multiplayer"));
-        // array of string containing cities
-        Boolean s1[] = { false, true};
-        // create checkbox
-        JComboBox multiplayer = new JComboBox(s1);
-        frame.add(multiplayer);
-        JCheckBox check = new JCheckBox("center");
-
-        JButton button = new JButton("update");
-        button.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (address.getText().equals("") || width.getText().equals("")) {
-                    JOptionPane.showMessageDialog(frame, "Campos por preenhcer");
-                }else{
-                        frame.setVisible(false);
-                    try {
-                        System.out.println(multiplayer.getSelectedItem());
-                        MainClient game = new MainClient(address.getText(), Integer.parseInt(width.getText()) , (Boolean) multiplayer.getSelectedItem());
-                        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            }
-        });
-
-        width.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if ( ((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
-                    e.consume();  // if it's not a number, ignore the event
-                }
-            }
-        });
-        frame.getRootPane().setDefaultButton(button);
-        frame.add(button);
-
-        frame.pack();
-        frame.setResizable ( false );
-
-        frame.setVisible(true);
-
-
-
-
-
+    public static void main(String[] args) throws IOException {
+        MainClient game = new MainClient("localhost", 8080 , true);
     }
 
 }
