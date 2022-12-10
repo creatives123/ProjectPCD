@@ -69,6 +69,7 @@ public class Cell {
         if(this.isOcupied() && !this.player.isActive() && !player.isHumanPlayer()) {
             // Em caso um bot tentar mover-se para uma celula com um jogador morto ou vencedor fica a espera
             // Esta espera vai ser interrompida com uma sub thread que fica a espera 2 segundos no player
+            System.out.println("Sou o " + player.getIDPlayer() + " e estou parado num obstáculo");
             wait();
         }
         else if(this.isOcupied() && !this.player.isActive() && player.isHumanPlayer()){
@@ -85,6 +86,7 @@ public class Cell {
         try{
             //Valida se o jogador se está a mover para um posição ocupada por um jogador
             if(this.isOcupied() && this.player.isActive()) {
+                System.out.println("Jogador " + player.getIDPlayer() + " vai entrar em confronto com o " + this.player.getIDPlayer());
                 //Começa o confronto
                 switch (fightCastle(this.player, player)) {
                     case 1 -> conquerCastle(this.player, player);
@@ -140,6 +142,7 @@ public class Cell {
 
     //Após confronto, atualiza as vidas dos jogadores
     private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer){
+        System.out.println(winnerPlayer + " Saiu vitorioso do confronto com o " + defeatPlayer);
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());
        

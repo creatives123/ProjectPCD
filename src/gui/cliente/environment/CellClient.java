@@ -4,6 +4,8 @@ import environment.Coordinate;
 import environment.PlayerMinimal;
 import gui.cliente.GameClient;
 
+//Classe CellCliente é uma classe simplificada da Classe Cell do Game
+//Apenas tem métodos simples para permitir a construção do jogo
 public class CellClient {
     private final GameClient game;
     private final Coordinate position;
