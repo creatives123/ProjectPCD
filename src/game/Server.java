@@ -1,14 +1,12 @@
 package game;
 
 import environment.Direction;
-import game.Game;
-import game.HumanPlayer;
-import game.Player;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Objects;
+import java.util.Random;
 
 
 public class Server extends Thread implements Serializable {
@@ -23,6 +21,8 @@ public class Server extends Thread implements Serializable {
         Player player2;
         Socket socket;
         boolean multiplayer;
+        Random randomGenerator = new Random();
+        public static final int STARTLIFE = 5;
 
         public DealWithClient(Socket socket, Game game) throws IOException {
             this.game = game;
@@ -33,11 +33,11 @@ public class Server extends Thread implements Serializable {
             try {
                 multiplayer = Boolean.parseBoolean(getMultiplayer());
                 synchronized (this) {
-                    player1 = new HumanPlayer(1, game, (byte) 5);
+                    player1 = new HumanPlayer(randomGenerator.nextInt((int)100) + 1, game, (byte) STARTLIFE);
                     player1.start();
                     game.listPlayers.add(player1);
                     if (multiplayer) {
-                        player2 = new HumanPlayer(1, game, (byte) 3);
+                        player2 = new HumanPlayer(randomGenerator.nextInt((int)100) + 1, game, (byte) STARTLIFE);
                         player2.start();
                         game.listPlayers.add(player2);
                     }
@@ -128,7 +128,7 @@ public class Server extends Thread implements Serializable {
                     ooStream.println("alive");
                 }
             } else {
-                if (!player1.isActive() | game.Winners()){
+                if (!player1.isActive() || game.Winners()){
                     ooStream.println("end");
                     this.interrupt();
                 }else {
