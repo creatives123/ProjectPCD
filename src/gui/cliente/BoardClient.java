@@ -2,9 +2,7 @@ package gui.cliente;
 
 import environment.Coordinate;
 import environment.Direction;
-import game.Game;
 import environment.PlayerMinimal;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -32,17 +30,17 @@ public class BoardClient extends JComponent implements KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        double cellHeight = getHeight() / (double) Game.DIMY;
-        double cellWidth = getWidth() / (double) Game.DIMX;
+        double cellHeight = getHeight() / (double) GameClient.DIMY;
+        double cellWidth = getWidth() / (double) GameClient.DIMX;
 
-        for (int y = 1; y < Game.DIMY; y++) {
+        for (int y = 1; y < GameClient.DIMY; y++) {
             g.drawLine(0, (int) (y * cellHeight), getWidth(), (int) (y * cellHeight));
         }
-        for (int x = 1; x < Game.DIMX; x++) {
+        for (int x = 1; x < GameClient.DIMX; x++) {
             g.drawLine((int) (x * cellWidth), 0, (int) (x * cellWidth), getHeight());
         }
-        for (int x = 0; x < Game.DIMX; x++)
-            for (int y = 0; y < Game.DIMY; y++) {
+        for (int x = 0; x < GameClient.DIMX; x++)
+            for (int y = 0; y < GameClient.DIMY; y++) {
                 Coordinate p = new Coordinate(x, y);
 
                 PlayerMinimal player = game.getCell(p).getPlayer();

@@ -22,7 +22,9 @@ public class MainClient implements Observer {
         try {
             this.IP = IP;
             this.porto = porto;
+            // liga-se ao servidor
             connectToServer();
+            // constroi
             buildGui();
             game.addObserver(this);
 
