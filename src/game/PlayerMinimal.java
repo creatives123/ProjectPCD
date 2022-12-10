@@ -4,6 +4,7 @@ import environment.Coordinate;
 
 import java.io.Serializable;
 
+//Criação do jogador PlayerMinimal que vai ser usado para enviar para o Cliente
 public class PlayerMinimal implements Serializable {
     private byte currentStrength;
     protected byte originalStrength;

@@ -11,6 +11,7 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	private final int id;
 	private byte currentStrength;
 	protected byte originalStrength;
+	public CountDownLatch cdl;
 
 
 	private Coordinate posicao;
@@ -25,7 +26,7 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	public void updatePosition(Coordinate at){
 		posicao = at;
 	}
-	CountDownLatch cdl;
+	
 
 	public Player(int id, Game game, byte strength) {
 		super();
@@ -38,6 +39,7 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	public int getIDPlayer(){
 		return id;
 	}
+
 	public abstract boolean isHumanPlayer();
 
 	public void move(Coordinate direction) throws InterruptedException {
@@ -45,6 +47,7 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 		newCell.movePlayer(this);	
 	}
 
+	//Faz update da força de cada jogador e interrompe os jogadores mortos ou acima de 10 de vida
 	public void updateStrenght(byte value){
 		int newStrenght = this.currentStrength + value;
 		this.currentStrength = (byte) newStrenght;
@@ -57,11 +60,14 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 			this.getCurrentCell().isFull.signal();
 		}
 	}
+
+	//Interrompe o jogador
 	public synchronized void killPlayer(){
 		currentStrength = (byte) 0;
 		this.interrupt();
 		game.notifyChange();
 	}
+
 	public boolean isActive(){
 		// Retorna se o jogador ainda está ativo no jogo
 		return getCurrentStrength() > 0 && getCurrentStrength() < Game.MAXLIFE;
@@ -70,12 +76,15 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	@Override
 	public abstract void run();
 
+	//Coloca o jogador numa posição aleatória
 	public void setinitialposition(){
 		try {
 			Cell initialPos=game.getRandomCell();
 			initialPos.setPlayer(this);
 		} catch (InterruptedException e) {}
 
+		//Valide se é interrompido por ter um jogador morto na célula onde se ia colocar
+		//Volta a correr recursivamente a função
 		if (this.isInterrupted()){
 			setinitialposition();
 		}
@@ -112,7 +121,6 @@ public abstract class Player extends Thread implements Comparable<Player>,Serial
 	public byte getCurrentStrength() {
 		return currentStrength;
 	}
-
 
 	public int getIdentification() {
 		return id;
