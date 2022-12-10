@@ -7,11 +7,8 @@
  */
 package gui.cliente;
 import environment.Coordinate;
-import game.Game;
 import game.PlayerMinimal;
-
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 
@@ -23,8 +20,8 @@ public class GameClient extends Observable {
     public GameClient() throws IOException {
         board = new CellClient[GameClient.DIMX][GameClient.DIMY];
 
-        for (int x = 0; x < Game.DIMX; x++)
-            for (int y = 0; y < Game.DIMY; y++)
+        for (int x = 0; x < GameClient.DIMX; x++)
+            for (int y = 0; y < GameClient.DIMY; y++)
                 board[x][y] = new CellClient(new Coordinate(x, y), this);
     }
 
@@ -40,8 +37,8 @@ public class GameClient extends Observable {
     }
 
     private void clearBoard(){
-        for (int x = 0; x < Game.DIMX; x++)
-            for (int y = 0; y < Game.DIMY; y++)
+        for (int x = 0; x < GameClient.DIMX; x++)
+            for (int y = 0; y < GameClient.DIMY; y++)
                 board[x][y].clearPlayer();
     }
 
