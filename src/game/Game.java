@@ -82,6 +82,7 @@ public class Game extends Observable {
             }
 
             cdl.await();
+            
             winner = true;
             for(Player player: listPlayers){
                 player.interrupt();

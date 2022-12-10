@@ -54,7 +54,6 @@ public class Cell {
                 }
                 
             }
-            //System.out.println("Player " + player.getIDPlayer() + " fui posto na celula" + this.getPosition());
             player.updatePosition(this.getPosition());
             this.player = player;
         } finally {

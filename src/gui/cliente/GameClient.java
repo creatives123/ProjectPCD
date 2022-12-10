@@ -1,10 +1,3 @@
-/**
- * Created by Alexandre Torres on IntelliJ IDEA.
- * Date: 26/11/2022
- * Time: 12:14
- * <p>
- * Details of the file:
- */
 package gui.cliente;
 import environment.Coordinate;
 import game.PlayerMinimal;

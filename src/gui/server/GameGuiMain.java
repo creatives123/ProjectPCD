@@ -9,14 +9,12 @@ import gui.BoardJComponent;
 import multiplayer.Server;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class GameGuiMain implements Observer {
 	private final JFrame frame = new JFrame("pcd.io");
 	private BoardJComponent boardGui;
 	private Game game;
-
-	//RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
-
 
 	public GameGuiMain() throws IOException {
 		super();
@@ -42,8 +40,8 @@ public class GameGuiMain implements Observer {
 	public void init()  {
 		frame.setVisible(true);
 		game.addBots();
-
-		System.out.println("\n #### 3 vencedores encontrados #### \n");
+		JOptionPane.showMessageDialog(frame, "3 vencedores encontrados",
+		"Fim do jogo", JOptionPane.INFORMATION_MESSAGE);
 
 	}
 
