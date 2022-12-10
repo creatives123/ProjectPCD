@@ -142,7 +142,7 @@ public class Cell {
 
     //Após confronto, atualiza as vidas dos jogadores
     private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer){
-        System.out.println(winnerPlayer + " Saiu vitorioso do confronto com o " + defeatPlayer);
+        System.out.println(winnerPlayer.getIDPlayer() + " Saiu vitorioso do confronto com o " + defeatPlayer.getIDPlayer());
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());
        
