@@ -19,21 +19,11 @@ import java.awt.event.KeyListener;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-/**
- * Creates a JComponent to display the game state.
- * At the same time, this is also a KeyListener for itself: when a key is pressed,
- * attribute lastPressedDirection is updated accordingly. This feature is a demo to
- * better understand how to deal with keys pressed, useful for the remote client.
- * This feature is not helpful for the main application and should be ignored.
- * This class does not need to be edited.
- *
- * @author luismota
- */
 public class BoardClient extends JComponent implements KeyListener {
-    private GameClient game;
+    private final GameClient game;
 
-    private Image obstacleImage = new ImageIcon("obstacle.png").getImage();
-    private Image humanPlayerImage = new ImageIcon("abstract-user-flat.png").getImage();
+    private final Image obstacleImage = new ImageIcon("obstacle.png").getImage();
+    private final Image humanPlayerImage = new ImageIcon("abstract-user-flat.png").getImage();
     private String lastPressedDirection = null;
 
     public BoardClient(GameClient game) {
@@ -97,30 +87,14 @@ public class BoardClient extends JComponent implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_A:
-                lastPressedDirection = "P2|" + environment.Direction.LEFT;
-                break;
-            case KeyEvent.VK_D:
-                lastPressedDirection = "P2|" + environment.Direction.RIGHT;
-                break;
-            case KeyEvent.VK_W:
-                lastPressedDirection = "P2|" + environment.Direction.UP;
-                break;
-            case KeyEvent.VK_S:
-                lastPressedDirection = "P2|" + environment.Direction.DOWN;
-                break;
-            case KeyEvent.VK_LEFT:
-                lastPressedDirection = "P1|" + environment.Direction.LEFT;
-                break;
-            case KeyEvent.VK_RIGHT:
-                lastPressedDirection = "P1|" + environment.Direction.RIGHT;
-                break;
-            case KeyEvent.VK_UP:
-                lastPressedDirection = "P1|" + environment.Direction.UP;
-                break;
-            case KeyEvent.VK_DOWN:
-                lastPressedDirection = "P1|" + environment.Direction.DOWN;
-                break;
+            case KeyEvent.VK_A -> lastPressedDirection = "P2|" + Direction.LEFT;
+            case KeyEvent.VK_D -> lastPressedDirection = "P2|" + Direction.RIGHT;
+            case KeyEvent.VK_W -> lastPressedDirection = "P2|" + Direction.UP;
+            case KeyEvent.VK_S -> lastPressedDirection = "P2|" + Direction.DOWN;
+            case KeyEvent.VK_LEFT -> lastPressedDirection = "P1|" + Direction.LEFT;
+            case KeyEvent.VK_RIGHT -> lastPressedDirection = "P1|" + Direction.RIGHT;
+            case KeyEvent.VK_UP -> lastPressedDirection = "P1|" + Direction.UP;
+            case KeyEvent.VK_DOWN -> lastPressedDirection = "P1|" + Direction.DOWN;
         }
     }
 

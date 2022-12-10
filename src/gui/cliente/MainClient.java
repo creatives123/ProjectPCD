@@ -7,14 +7,10 @@
  */
 package gui.cliente;
 import game.PlayerMinimal;
-import gui.cliente.BoardClient;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
@@ -23,8 +19,7 @@ import java.util.Observer;
 public class MainClient implements Observer {
     private final JFrame frame = new JFrame("Cliente");
     private BoardClient boardGui;
-    private GameClient game = new GameClient();
-    private ClienteCon thread;
+    private final GameClient game = new GameClient();
     private Socket socket;
     private String IP;
     private int porto;
@@ -41,7 +36,6 @@ public class MainClient implements Observer {
 
             closeConnection();
         }catch (IOException | ClassNotFoundException | InterruptedException e){
-            // TODO Verficar o que devemos fazr aqui
             JOptionPane.showMessageDialog(frame, "Ligação ao servidor foi desconectada!",
                     "Server error!", JOptionPane.ERROR_MESSAGE);
 
@@ -87,6 +81,7 @@ public class MainClient implements Observer {
         InputStream iStream = socket.getInputStream();
         ObjectInputStream oiStream = new ObjectInputStream(iStream);
         // le a lista de players que recebe do servidor
+
         List<PlayerMinimal> listPlayers = (List<PlayerMinimal>) oiStream.readObject();
         game.updateBoard(listPlayers);
     }
@@ -104,10 +99,7 @@ public class MainClient implements Observer {
         BufferedReader oiStream = new BufferedReader(new InputStreamReader(iStream));
         // le o que está na socket
         String value = oiStream.readLine();
-        if (Objects.equals(value, "end")) {
-            return false;
-        }
-        return true;
+        return !Objects.equals(value, "end");
     }
 
     public void closeConnection() throws IOException {

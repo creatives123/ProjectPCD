@@ -1,7 +1,6 @@
 package gui.cliente;
 
 import environment.Coordinate;
-import game.Player;
 import game.PlayerMinimal;
 public class CellClient {
     private final GameClient game;
@@ -9,7 +8,6 @@ public class CellClient {
     private PlayerMinimal player = null;
 
     public CellClient(Coordinate position, GameClient g) {
-        super();
         this.position = position;
         this.game = g;
     }
