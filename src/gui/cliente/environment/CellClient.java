@@ -1,7 +1,8 @@
-package gui.cliente;
+package gui.cliente.environment;
 
 import environment.Coordinate;
 import game.PlayerMinimal;
+import gui.cliente.GameClient;
 
 public class CellClient {
     private final GameClient game;
@@ -30,5 +31,4 @@ public class CellClient {
         this.player = null;
         game.notifyChange();
     }
-
 }

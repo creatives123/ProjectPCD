@@ -1,9 +1,9 @@
 package gui.cliente;
 
 import environment.Coordinate;
-import environment.Direction;
 import game.Game;
 import game.PlayerMinimal;
+import gui.cliente.environment.DirectionClient;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -84,14 +84,14 @@ public class BoardClient extends JComponent implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_A -> lastPressedDirection = "P2|" + Direction.LEFT;
-            case KeyEvent.VK_D -> lastPressedDirection = "P2|" + Direction.RIGHT;
-            case KeyEvent.VK_W -> lastPressedDirection = "P2|" + Direction.UP;
-            case KeyEvent.VK_S -> lastPressedDirection = "P2|" + Direction.DOWN;
-            case KeyEvent.VK_LEFT -> lastPressedDirection = "P1|" + Direction.LEFT;
-            case KeyEvent.VK_RIGHT -> lastPressedDirection = "P1|" + Direction.RIGHT;
-            case KeyEvent.VK_UP -> lastPressedDirection = "P1|" + Direction.UP;
-            case KeyEvent.VK_DOWN -> lastPressedDirection = "P1|" + Direction.DOWN;
+            case KeyEvent.VK_A -> lastPressedDirection = "P2|" + DirectionClient.LEFT;
+            case KeyEvent.VK_D -> lastPressedDirection = "P2|" + DirectionClient.RIGHT;
+            case KeyEvent.VK_W -> lastPressedDirection = "P2|" + DirectionClient.UP;
+            case KeyEvent.VK_S -> lastPressedDirection = "P2|" + DirectionClient.DOWN;
+            case KeyEvent.VK_LEFT -> lastPressedDirection = "P1|" + DirectionClient.LEFT;
+            case KeyEvent.VK_RIGHT -> lastPressedDirection = "P1|" + DirectionClient.RIGHT;
+            case KeyEvent.VK_UP -> lastPressedDirection = "P1|" + DirectionClient.UP;
+            case KeyEvent.VK_DOWN -> lastPressedDirection = "P1|" + DirectionClient.DOWN;
         }
     }
 

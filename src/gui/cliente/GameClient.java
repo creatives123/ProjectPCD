@@ -1,6 +1,8 @@
 package gui.cliente;
 import environment.Coordinate;
 import game.PlayerMinimal;
+import gui.cliente.environment.CellClient;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
