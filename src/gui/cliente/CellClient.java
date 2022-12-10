@@ -2,6 +2,7 @@ package gui.cliente;
 
 import environment.Coordinate;
 import game.PlayerMinimal;
+
 public class CellClient {
     private final GameClient game;
     private final Coordinate position;

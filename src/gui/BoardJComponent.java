@@ -15,16 +15,6 @@ import java.awt.event.KeyListener;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-/**
- * Creates a JComponent to display the game state.
- * At the same time, this is also a KeyListener for itself: when a key is pressed,
- * attribute lastPressedDirection is updated accordingly. This feature is a demo to
- * better understand how to deal with keys pressed, useful for the remote client.
- * This feature is not helpful for the main application and should be ignored.
- * This class does not need to be edited.
- * @author luismota
- *
- */
 public class BoardJComponent extends JComponent implements KeyListener {
 	private Game game;
 

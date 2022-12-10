@@ -1,19 +1,14 @@
 package multiplayer;
 
-import environment.Coordinate;
 import environment.Direction;
 import game.Game;
 import game.HumanPlayer;
 import game.Player;
-import game.PlayerMinimal;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 
 public class Server extends Thread implements Serializable {
