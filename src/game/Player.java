@@ -49,10 +49,12 @@ public abstract class Player extends Thread implements Comparable<Player>  {
 		int newStrenght = this.currentStrength + value;
 		this.currentStrength = (byte) newStrenght;
 		if(this.currentStrength >= (byte) Game.MAXLIFE){
+			System.out.println("Jogador " + this.getIDPlayer() + " venceu o jogo");
 			this.currentStrength = (byte) Game.MAXLIFE;
 			this.interrupt();
 			game.cdl.countDown();
 		}else if(this.currentStrength <= (byte) 0){
+			System.out.println("Jogador " + this.getIDPlayer() + " perdeu o jogo");
 			this.interrupt();
 			this.getCurrentCell().isFull.signal();
 		}
