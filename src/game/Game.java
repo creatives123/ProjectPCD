@@ -77,7 +77,7 @@ public class Game extends Observable {
             // Thread.sleep(3000);
             for (int i = 1; i <= MAXBOTS; i++ ){
                 // RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
-                int rand = randomGenerator.nextInt(3) + 1;
+                int rand = randomGenerator.nextInt((int)MAX_INITIAL_STRENGTH) + 1;
                 Player player = new PhoneyHumanPlayer(i, this, (byte)(rand));
                 listPlayers.add(player);
                 player.start();
