@@ -13,6 +13,7 @@ public class HumanPlayer extends Player {
         return true;
     }
 
+    //Move o Player para a próxima posição
     @Override
     public void move(Coordinate direction) throws InterruptedException {
         Coordinate nextposition = this.getCurrentCell().getPosition().translate(direction);

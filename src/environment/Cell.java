@@ -39,10 +39,13 @@ public class Cell {
         return player;
     }
 
+    //Coloca os Players em jogo
     public void setPlayer(Player player) throws InterruptedException {
         lock.lock();
         try {
+            //Verifica se a posição está ocupada
             while (this.isOcupied()) {
+                //Valida se está ocupada por um jogador vivo ou morto
                 if(this.getPlayer().isActive()){
                     System.out.print("Sou o " + player.getIDPlayer() + " e tenho a Celula " + this.getPosition() + " Ocupada pelo " + this.getPlayer().getIDPlayer() + "\n");
                     isFull.await();
@@ -63,6 +66,7 @@ public class Cell {
 
     }
 
+    //Trata do movimento do jogador, função sync
     public synchronized void movePlayer(Player player) throws InterruptedException {
        
         if(this.isOcupied() && !this.player.isActive() && !player.isHumanPlayer()) {
@@ -71,6 +75,7 @@ public class Cell {
             wait();
         }
         else if(this.isOcupied() && !this.player.isActive() && player.isHumanPlayer()){
+            // Faz com que os humanos não fiquem bloqueados por jogadores mortos
             return;
         }
 
@@ -81,7 +86,9 @@ public class Cell {
         lock.lock();
 
         try{
+            //Valida se o jogador se está a mover para um posição ocupada por um jogador
             if(this.isOcupied() && this.player.isActive()) {
+                //Começa o confronto
                 switch (fightCastle(this.player, player)) {
                     case 1 -> conquerCastle(this.player, player);
                     case 2 -> conquerCastle(player, this.player);
@@ -92,6 +99,7 @@ public class Cell {
                 lock.unlock();
                 
             }else{
+                //Move o jogador para a nova posição
                 game.getCell(player.getCurrentCell().getPosition()).removePlayer();
                 player.updatePosition(this.getPosition());
                 this.player = player;
@@ -108,18 +116,22 @@ public class Cell {
         
     }
 
+    //Remove o jogador da célula
     public synchronized void removePlayer() {
         player = null;
         lock.lock();
         try {
+            //Notifica o jogador à espera de entrar nesta célula que já saiu dela
             isFull.signal();
         } finally {
             lock.unlock();
         }
     }
 
+    //Resolve os Confrontos entre jogadores
     private int fightCastle(Player player1, Player player2) {
-        // Player 1 dono do castelo, Player 2 mouro
+        // Player 1 - O que está na Célula
+        // Player 2 - O que se move para a Célula
         if (player1.getCurrentStrength() > player2.getCurrentStrength()) {
             return 1;
         } else if (player1.getCurrentStrength() < player2.getCurrentStrength()) {
@@ -129,6 +141,7 @@ public class Cell {
         }
     }
 
+    //Após confronto, atualiza as vidas dos jogadores
     private synchronized void conquerCastle(Player winnerPlayer, Player defeatPlayer){
         winnerPlayer.updateStrenght(defeatPlayer.getCurrentStrength());
         defeatPlayer.updateStrenght((byte) -defeatPlayer.getCurrentStrength());

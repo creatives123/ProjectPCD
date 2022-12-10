@@ -3,11 +3,6 @@ package game;
 import environment.Coordinate;
 import environment.Direction;
 
-/**
- * Class to demonstrate a player being added to the game.
- * @author luismota
- *
- */
 public class PhoneyHumanPlayer extends Player {
 	//Variável para guardar a força com qual o player começa.
 	int initialstrenght;
@@ -49,6 +44,7 @@ public class PhoneyHumanPlayer extends Player {
 		}
 	}
 
+	// Gera a próxima posição random do BOT
 	public Coordinate generatedirection(){
 		Coordinate nextposition = this.getCurrentCell().getPosition().translate(Direction.random().getVector());
 		while(nextposition.x > Game.DIMX -1 || nextposition.x < 0 || nextposition.y < 0 || nextposition.y > Game.DIMY -1){

@@ -1,6 +1,5 @@
 package game;
 
-
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -73,8 +72,8 @@ public class Game extends Observable {
     public void addBots(){
         try {
             Thread.sleep(10000);
+            //Cria os jogadores BOTS e iniciaos
             for (int i = 1; i <= MAXBOTS; i++ ){
-                // RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
                 int rand = randomGenerator.nextInt((int)MAX_INITIAL_STRENGTH) + 1;
                 Player player = new PhoneyHumanPlayer(i, this, (byte)(rand));
                 listPlayers.add(player);
@@ -82,17 +81,18 @@ public class Game extends Observable {
             }
 
             cdl.await();
-            
-            winner = true;
-            for(Player player: listPlayers){
-                player.interrupt();
-            }
+            endgame();
+        } catch (InterruptedException ignored) {}
+    }
 
-        } catch (InterruptedException ignored) {
+    public void endgame(){
+        winner = true;
+        for(Player player: listPlayers){
+            player.interrupt();
         }
     }
 
-
+    //Cria uma lista de jogsadores com apenas a informação necessária a enviar para o Cliente
     public List<PlayerMinimal> getPlayers(){
         List<PlayerMinimal> listPlayers = new ArrayList<PlayerMinimal>();
         for (int x = 0; x < Game.DIMX; x++)

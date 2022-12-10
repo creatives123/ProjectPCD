@@ -1,10 +1,4 @@
-/**
- * Created by Alexandre Torres on IntelliJ IDEA.
- * Date: 24/11/2022
- * Time: 20:08
- * <p>
- * Details of the file:
- */
+
 package gui.cliente;
 import game.PlayerMinimal;
 import javax.swing.*;
@@ -80,8 +74,6 @@ public class MainClient implements Observer {
     void getPlayers() throws IOException, ClassNotFoundException, InterruptedException {
         InputStream iStream = socket.getInputStream();
         ObjectInputStream oiStream = new ObjectInputStream(iStream);
-        // le a lista de players que recebe do servidor
-
         List<PlayerMinimal> listPlayers = (List<PlayerMinimal>) oiStream.readObject();
         game.updateBoard(listPlayers);
     }
