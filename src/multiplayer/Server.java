@@ -60,6 +60,7 @@ public class Server extends Thread implements Serializable {
 
         private void serve() throws IOException, ClassNotFoundException, InterruptedException {
             // enquanto corre actualiza o cliente com os players e novas posições e recebe novos movimentos
+            System.out.println(checkStatus());
             while (checkStatus()) {
                 // envia a lista actual dos jogadores
                 sendPlayers(socket);
@@ -97,9 +98,9 @@ public class Server extends Thread implements Serializable {
 
         private boolean checkStatus() {
             if (multiplayer) {
-                return !player1.isActive() || !player2.isActive();
+                return player1.isActive() && player2.isActive();
             } else {
-                return !player1.isActive();
+                return player1.isActive();
 
             }
         }
