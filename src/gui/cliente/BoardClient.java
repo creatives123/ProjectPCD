@@ -1,4 +1,4 @@
-package gui;
+package gui.cliente;
 
 import environment.Coordinate;
 import environment.Direction;
@@ -6,7 +6,7 @@ import game.Game;
 import game.Player;
 import game.PlayerMinimal;
 import gui.cliente.GameClient;
-import sun.awt.ExtendedKeyCodes;
+//import sun.awt.ExtendedKeyCodes;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

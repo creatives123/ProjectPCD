@@ -7,7 +7,7 @@
  */
 package gui.cliente;
 import game.PlayerMinimal;
-import gui.BoardClient;
+import gui.cliente.BoardClient;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
