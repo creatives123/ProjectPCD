@@ -61,12 +61,15 @@ public class Server extends Thread implements Serializable {
 
         private void serve() throws IOException, ClassNotFoundException, InterruptedException {
             // enquanto corre actualiza o cliente com os players e novas posições e recebe novos movimentos
-            System.out.println(checkStatus());
-            while (checkStatus()) {
+            while (true) {
                 // envia a lista actual dos jogadores
                 sendPlayers();
 
                 sendPlayerStatus();
+
+                if(!checkStatus()){
+                    break;
+                }
                 // verifica se recebeu uma mudança de direção
                 getDirection();
 
@@ -76,6 +79,7 @@ public class Server extends Thread implements Serializable {
 
         public void closeConnection() throws IOException {
             socket.close();
+            System.out.println("Ligação terminada");
         }
 
         void getDirection() throws IOException, InterruptedException {
@@ -89,7 +93,7 @@ public class Server extends Thread implements Serializable {
                 String[] arrOfStr = value.split("\\|");
                 if (Objects.equals(arrOfStr[0], "P1") && player1.isActive()) {
                     player1.move(Direction.valueOf(arrOfStr[1]).getVector());
-                } else if (Objects.equals(arrOfStr[0], "P2") && multiplayer && player1.isActive()) {
+                } else if (Objects.equals(arrOfStr[0], "P2") && multiplayer && player2.isActive()) {
                     player2.move(Direction.valueOf(arrOfStr[1]).getVector());
                 }
             }
@@ -98,7 +102,7 @@ public class Server extends Thread implements Serializable {
 
         private boolean checkStatus() {
             if (multiplayer) {
-                return player1.isActive() && player2.isActive();
+                return player1.isActive() || player2.isActive();
             } else {
                 return player1.isActive();
 
