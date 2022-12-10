@@ -6,13 +6,10 @@ import environment.Direction;
 public class PhoneyHumanPlayer extends Player {
 	//Variável para guardar a força com qual o player começa.
 	int initialstrenght;
-
-
 	public PhoneyHumanPlayer(int id, Game game, byte strength) {
 		super(id, game, strength);
 		initialstrenght = (int) strength;
 	}
-
 	public boolean isHumanPlayer() {
 		return false;
 	}

@@ -3,7 +3,6 @@ package game;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 import environment.Coordinate;
 import environment.PlayerMinimal;
 
@@ -14,14 +13,10 @@ public class Game extends Observable {
     public static final int MAXLIFE = 10;
     private static final int NUM_PLAYERS = 90;
     private static final int NUM_FINISHED_PLAYERS_TO_END_GAME = 3;
-
     public static final long REFRESH_INTERVAL = 400;
     public static final double MAX_INITIAL_STRENGTH = 3;
     public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
     public static final long INITIAL_WAITING_TIME = 10000;
-
-
-    private final AtomicInteger totalWinners = new AtomicInteger(0);
     private Boolean winner = false;
     protected Cell[][] board;
     Random randomGenerator = new Random();
@@ -55,12 +50,6 @@ public class Game extends Observable {
 
     public Cell getRandomCell() {
         return getCell(new Coordinate((int) (Math.random() * Game.DIMX), (int) (Math.random() * Game.DIMY)));
-    }
-
-    public void updateWinners() {
-        // incrementa sempre que um jogador chega a MAXLIFE
-        totalWinners.incrementAndGet();
-        System.out.println("Winner Count: " + totalWinners.get());
     }
 
     public boolean Winners() {

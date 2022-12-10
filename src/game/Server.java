@@ -33,7 +33,7 @@ public class Server extends Thread implements Serializable {
             try {
                 multiplayer = Boolean.parseBoolean(getMultiplayer());
                 synchronized (this) {
-                    player1 = new HumanPlayer(1, game, (byte) 3);
+                    player1 = new HumanPlayer(1, game, (byte) 5);
                     player1.start();
                     game.listPlayers.add(player1);
                     if (multiplayer) {
@@ -61,15 +61,15 @@ public class Server extends Thread implements Serializable {
             while (true) {
                 // envia a lista actual dos jogadores
                 sendPlayers();
-
+                // Envia o estado do jogo
                 sendPlayerStatus();
 
+                // Verifica se o jogo ainda está ativo
                 if(!checkStatus()){
                     break;
                 }
                 // verifica se recebeu uma mudança de direção
                 getDirection();
-
                 sleep(200);
             }
         }
@@ -98,6 +98,7 @@ public class Server extends Thread implements Serializable {
         }
 
         private boolean checkStatus() {
+            // verifica o estado do player ou players em caso de multiplayer
             if (multiplayer) {
                 return player1.isActive() || player2.isActive();
             } else {
@@ -116,6 +117,7 @@ public class Server extends Thread implements Serializable {
         }
 
         public void sendPlayerStatus() throws IOException {
+            // Envia para o cliente o estado do jogo
             OutputStream oStream = socket.getOutputStream();
             PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
             if (multiplayer) {

@@ -1,9 +1,8 @@
 package game;
 
-//Criação de uma Thread que interrompe os jogadores que estão parados à mais de 2 segundos
+//Criação de uma Thread que interrompe os jogadores parados há mais de 2 segundos
 public class ThreadWait extends Thread {
     Player player;
-
     ThreadWait (Player player){
         this.player = player;
     }
