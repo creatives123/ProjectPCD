@@ -27,7 +27,7 @@ public class Game extends Observable {
     private Boolean winner = false;
     protected Cell[][] board;
     Random randomGenerator = new Random();
-    private static final int MAXBOTS = 5;
+    private static final int MAXBOTS = 90;
     public LinkedList<Player> listPlayers = new LinkedList<>();
     public CountDownLatch cdl = new CountDownLatch(NUM_FINISHED_PLAYERS_TO_END_GAME);
 
@@ -72,7 +72,7 @@ public class Game extends Observable {
 
     public void addBots(){
         try {
-            // Thread.sleep(3000);
+            Thread.sleep(10000);
             for (int i = 1; i <= MAXBOTS; i++ ){
                 // RANDOM entre 1 e 3 (podemos tirar daqui e por no player)
                 int rand = randomGenerator.nextInt((int)MAX_INITIAL_STRENGTH) + 1;
