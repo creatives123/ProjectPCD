@@ -20,7 +20,7 @@ public class Game extends Observable {
     private Boolean winner = false;
     protected Cell[][] board;
     Random randomGenerator = new Random();
-    private static final int MAXBOTS = 90;
+    private static final int MAXBOTS = 30;
     public LinkedList<Player> listPlayers = new LinkedList<>();
     public CountDownLatch cdl = new CountDownLatch(NUM_FINISHED_PLAYERS_TO_END_GAME);
 
