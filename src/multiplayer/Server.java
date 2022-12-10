@@ -55,6 +55,7 @@ public class Server extends Thread implements Serializable {
                 if (multiplayer)
                     player2.killPlayer();
                 System.out.println("Ligação terminada");
+                e.printStackTrace();
             }
         }
 
@@ -63,7 +64,7 @@ public class Server extends Thread implements Serializable {
             System.out.println(checkStatus());
             while (checkStatus()) {
                 // envia a lista actual dos jogadores
-                sendPlayers(socket);
+                sendPlayers();
 
                 sendPlayerStatus();
                 // verifica se recebeu uma mudança de direção
@@ -87,13 +88,12 @@ public class Server extends Thread implements Serializable {
             if (!value.equals("null")) {
                 String[] arrOfStr = value.split("\\|");
                 if (Objects.equals(arrOfStr[0], "P1") && player1.isActive()) {
-                    System.out.println("Mover Player1");
                     player1.move(Direction.valueOf(arrOfStr[1]).getVector());
                 } else if (Objects.equals(arrOfStr[0], "P2") && multiplayer && player1.isActive()) {
-                    System.out.println("Mover Player2");
                     player2.move(Direction.valueOf(arrOfStr[1]).getVector());
                 }
             }
+
         }
 
         private boolean checkStatus() {
@@ -117,16 +117,25 @@ public class Server extends Thread implements Serializable {
         public void sendPlayerStatus() throws IOException {
             OutputStream oStream = socket.getOutputStream();
             PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
-            if (!player1.isActive() && !player2.isActive()) {
-                ooStream.println("end");
-                this.interrupt();
+            if (multiplayer) {
+                if (!player1.isActive() && !player2.isActive()) {
+                    ooStream.println("end");
+                    this.interrupt();
+                }else {
+                    ooStream.println("alive");
+                }
             } else {
-                ooStream.println("alive");
+                if (!player1.isActive()){
+                    ooStream.println("end");
+                    this.interrupt();
+                }else {
+                    ooStream.println("alive");
+                }
             }
 
         }
 
-        private void sendPlayers(Socket socket) throws IOException {
+        private void sendPlayers() throws IOException {
             // Envia uma lista de PlayerMinimal que contem só os dados necessários para a leitura do cliente.
             OutputStream oStream = socket.getOutputStream();
             ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
