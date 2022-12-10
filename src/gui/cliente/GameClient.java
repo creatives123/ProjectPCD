@@ -12,6 +12,7 @@ import game.PlayerMinimal;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 
 public class GameClient extends Observable {
@@ -31,7 +32,7 @@ public class GameClient extends Observable {
         return board[at.x][at.y];
     }
 
-    public void updateBoard(LinkedList<PlayerMinimal> listaplayers) throws InterruptedException {
+    public void updateBoard(List<PlayerMinimal> listaplayers) throws InterruptedException {
         clearBoard();
         for(PlayerMinimal player: listaplayers){
             getCell(player.getCurrentCell()).setPlayer(player);

@@ -2,9 +2,7 @@ package game;
 
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Observable;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -93,4 +91,16 @@ public class Game extends Observable {
         }
     }
 
+
+    public List<PlayerMinimal> getPlayers(){
+        List<PlayerMinimal> listPlayers = new ArrayList<PlayerMinimal>();
+        for (int x = 0; x < Game.DIMX; x++)
+            for (int y = 0; y < Game.DIMY; y++)
+            {
+                Cell cell = board[x][y];
+                if(cell.isOcupied())
+                    listPlayers.add(new PlayerMinimal(cell.getPlayer()));
+            }
+        return listPlayers;
+    }
 }

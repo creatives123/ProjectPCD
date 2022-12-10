@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -86,7 +87,7 @@ public class MainClient implements Observer {
         InputStream iStream = socket.getInputStream();
         ObjectInputStream oiStream = new ObjectInputStream(iStream);
         // le a lista de players que recebe do servidor
-        LinkedList<PlayerMinimal> listPlayers = (LinkedList<PlayerMinimal>) oiStream.readObject();
+        List<PlayerMinimal> listPlayers = (List<PlayerMinimal>) oiStream.readObject();
         game.updateBoard(listPlayers);
     }
 
@@ -114,7 +115,7 @@ public class MainClient implements Observer {
     }
 
     public static void main(String[] args) throws IOException {
-        MainClient game = new MainClient("localhost", 8080 , true);
+        MainClient game = new MainClient("localhost", 8080 , false);
     }
 
 }

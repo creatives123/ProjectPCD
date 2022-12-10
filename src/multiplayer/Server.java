@@ -37,13 +37,15 @@ public class Server extends Thread implements Serializable {
         public void run() {
             try {
                 multiplayer = Boolean.parseBoolean(getMultiplayer());
-                player1 = new HumanPlayer(1, game, (byte) 3);
-                player1.start();
-                game.listPlayers.add(player1);
-                if (multiplayer) {
-                    player2 = new HumanPlayer(1, game, (byte) 3);
-                    player2.start();
-                    game.listPlayers.add(player2);
+                synchronized (this) {
+                    player1 = new HumanPlayer(1, game, (byte) 3);
+                    player1.start();
+                    game.listPlayers.add(player1);
+                    if (multiplayer) {
+                        player2 = new HumanPlayer(1, game, (byte) 3);
+                        player2.start();
+                        game.listPlayers.add(player2);
+                    }
                 }
 
                 serve();
@@ -146,14 +148,14 @@ public class Server extends Thread implements Serializable {
             OutputStream oStream = socket.getOutputStream();
             ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
             // cria nova lista de minimals
-            LinkedList<PlayerMinimal> minimals = new LinkedList<>();
+            /*LinkedList<PlayerMinimal> minimals = new LinkedList<>();
             synchronized (this) {
                 for (Player player : game.listPlayers) {
                     minimals.add(new PlayerMinimal(player));
                 }
-            }
+            }*/
             // envia a lista para o cliente
-            ooStream.writeObject(minimals);
+            ooStream.writeObject(game.getPlayers());
         }
     }
 
