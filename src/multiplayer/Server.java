@@ -147,13 +147,6 @@ public class Server extends Thread implements Serializable {
             // Envia uma lista de PlayerMinimal que contem só os dados necessários para a leitura do cliente.
             OutputStream oStream = socket.getOutputStream();
             ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
-            // cria nova lista de minimals
-            /*LinkedList<PlayerMinimal> minimals = new LinkedList<>();
-            synchronized (this) {
-                for (Player player : game.listPlayers) {
-                    minimals.add(new PlayerMinimal(player));
-                }
-            }*/
             // envia a lista para o cliente
             ooStream.writeObject(game.getPlayers());
         }
