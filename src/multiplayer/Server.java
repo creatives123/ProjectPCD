@@ -42,12 +42,10 @@ public class Server extends Thread implements Serializable {
                         game.listPlayers.add(player2);
                     }
                 }
-
                 serve();
 
-
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                // TODO Tratar da exceção quando a ligação é terminada.. talvez meter o player morto?
+                // Coloca os jogadores como mortos quando a janela é fechada
                 player1.killPlayer();
                 if (multiplayer)
                     player2.killPlayer();
