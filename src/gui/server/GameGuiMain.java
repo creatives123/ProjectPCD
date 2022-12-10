@@ -6,7 +6,7 @@ import java.util.Observer;
 
 import game.Game;
 import gui.BoardJComponent;
-import multiplayer.Server;
+import game.Server;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;

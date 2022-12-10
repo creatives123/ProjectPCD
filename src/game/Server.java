@@ -1,4 +1,4 @@
-package multiplayer;
+package game;
 
 import environment.Direction;
 import game.Game;
