@@ -61,6 +61,7 @@ public class Game extends Observable {
         try {
             Thread.sleep(10000);
             //Cria os jogadores BOTS e iniciaos
+            System.out.println("Vai ser criado o jogo com " + MAXBOTS + " BOTS");
             for (int i = 1; i <= MAXBOTS; i++ ){
                 int rand = randomGenerator.nextInt((int)MAX_INITIAL_STRENGTH) + 1;
                 Player player = new PhoneyHumanPlayer(i, this, (byte)(rand));
