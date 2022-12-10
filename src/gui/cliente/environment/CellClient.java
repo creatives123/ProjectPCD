@@ -1,7 +1,7 @@
 package gui.cliente.environment;
 
 import environment.Coordinate;
-import game.PlayerMinimal;
+import environment.PlayerMinimal;
 import gui.cliente.GameClient;
 
 public class CellClient {

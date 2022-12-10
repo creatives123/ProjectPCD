@@ -1,6 +1,6 @@
 
 package gui.cliente;
-import game.PlayerMinimal;
+import environment.PlayerMinimal;
 
 import javax.swing.*;
 import java.io.*;

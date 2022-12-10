@@ -1,14 +1,11 @@
-package environment;
+package game;
 
-import game.Game;
-import game.Player;
+import environment.Coordinate;
 
 import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.sound.midi.Track;
 
 public class Cell {
     private Coordinate position;

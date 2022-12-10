@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import environment.Cell;
 import environment.Coordinate;
+import environment.PlayerMinimal;
 
 public class Game extends Observable {
 
@@ -99,8 +98,11 @@ public class Game extends Observable {
             for (int y = 0; y < Game.DIMY; y++)
             {
                 Cell cell = board[x][y];
-                if(cell.isOcupied())
-                    listPlayers.add(new PlayerMinimal(cell.getPlayer()));
+                if(cell.isOcupied()) {
+                    Player player = cell.getPlayer();
+                    listPlayers.add(new PlayerMinimal(player.getIDPlayer(), player.getCurrentStrength(),
+                            x , y, player.isHumanPlayer()));
+                }
             }
         return listPlayers;
     }

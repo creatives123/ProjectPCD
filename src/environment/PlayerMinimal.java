@@ -1,22 +1,19 @@
-package game;
-
-import environment.Coordinate;
+package environment;
 
 import java.io.Serializable;
 
 //Criação do jogador PlayerMinimal que vai ser usado para enviar para o Cliente
 public class PlayerMinimal implements Serializable {
-    private byte currentStrength;
-    protected byte originalStrength;
-    private Coordinate posicao;
-    private boolean type;
+    private final byte currentStrength;
+    private final Coordinate posicao;
+    private final boolean type;
     public int id;
 
-    public PlayerMinimal (Player player){
-        id = player.getIDPlayer();
-        currentStrength = player.getCurrentStrength();
-        posicao = player.getCurrentCell().getPosition();
-        type = player.isHumanPlayer();
+    public PlayerMinimal (int id, byte currentStrength, int x, int y, boolean isHuman){
+        this.id = id;
+        this.currentStrength = currentStrength;
+        this.posicao = new Coordinate(x,y);
+        this.type = isHuman;
     }
 
     public boolean isHumanPlayer() {

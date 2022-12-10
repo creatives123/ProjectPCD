@@ -1,12 +1,9 @@
 package game;
 
-import environment.Cell;
 import environment.Coordinate;
-
-import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
 
-public abstract class Player extends Thread implements Comparable<Player>,Serializable  {
+public abstract class Player extends Thread implements Comparable<Player>  {
 	protected  Game game;
 	private final int id;
 	private byte currentStrength;

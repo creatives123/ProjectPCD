@@ -3,7 +3,7 @@ package gui.cliente;
 import environment.Coordinate;
 import environment.Direction;
 import game.Game;
-import game.PlayerMinimal;
+import environment.PlayerMinimal;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
