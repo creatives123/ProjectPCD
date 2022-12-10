@@ -5,7 +5,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import game.Game;
-import gui.BoardJComponent;
 import game.Server;
 
 import javax.swing.JFrame;

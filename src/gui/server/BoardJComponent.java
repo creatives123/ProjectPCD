@@ -1,4 +1,4 @@
-package gui;
+package gui.server;
 
 import environment.Coordinate;
 import environment.Direction;
