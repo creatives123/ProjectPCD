@@ -1,6 +1,7 @@
 
 package gui.cliente;
 import game.PlayerMinimal;
+
 import javax.swing.*;
 import java.io.*;
 import java.net.InetAddress;
