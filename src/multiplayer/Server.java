@@ -48,14 +48,16 @@ public class Server extends Thread implements Serializable {
 
                 serve();
 
-                closeConnection();
+
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 // TODO Tratar da exceção quando a ligação é terminada.. talvez meter o player morto?
                 player1.killPlayer();
                 if (multiplayer)
                     player2.killPlayer();
-                System.out.println("Ligação terminada");
-                e.printStackTrace();
+            }
+            try {
+                closeConnection();
+            } catch (IOException ignore) {
             }
         }
 
@@ -145,8 +147,10 @@ public class Server extends Thread implements Serializable {
             ObjectOutputStream ooStream = new ObjectOutputStream(oStream);
             // cria nova lista de minimals
             LinkedList<PlayerMinimal> minimals = new LinkedList<>();
-            for (Player player : game.listPlayers) {
-                minimals.add(new PlayerMinimal(player));
+            synchronized (this) {
+                for (Player player : game.listPlayers) {
+                    minimals.add(new PlayerMinimal(player));
+                }
             }
             // envia a lista para o cliente
             ooStream.writeObject(minimals);
