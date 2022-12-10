@@ -24,10 +24,10 @@ public class MainClient implements Observer {
             this.porto = porto;
             // liga-se ao servidor
             connectToServer();
-            // constroi
+            // constroi o gui do jogo
             buildGui();
             game.addObserver(this);
-
+            // Envia para o servidor a informação que é multiplayer
             sendInformation(String.valueOf(multipleplayer));
             playGame();
 
