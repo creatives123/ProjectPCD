@@ -115,7 +115,7 @@ public class MainClient implements Observer {
     }
 
     public static void main(String[] args) throws IOException {
-        MainClient game = new MainClient("localhost", 8080 , false);
+        MainClient game = new MainClient("localhost", 8080 , true);
     }
 
 }

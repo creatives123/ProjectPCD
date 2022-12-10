@@ -126,14 +126,14 @@ public class Server extends Thread implements Serializable {
             OutputStream oStream = socket.getOutputStream();
             PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
             if (multiplayer) {
-                if (!player1.isActive() && !player2.isActive()) {
+                if (!player1.isActive() && !player2.isActive() || game.Winners()) {
                     ooStream.println("end");
                     this.interrupt();
                 }else {
                     ooStream.println("alive");
                 }
             } else {
-                if (!player1.isActive()){
+                if (!player1.isActive() | game.Winners()){
                     ooStream.println("end");
                     this.interrupt();
                 }else {
