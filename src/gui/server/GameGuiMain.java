@@ -3,10 +3,8 @@ package gui.server;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
-
 import game.Game;
 import game.Server;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 

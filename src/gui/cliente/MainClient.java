@@ -29,12 +29,12 @@ public class MainClient implements Observer {
             sendInformation(String.valueOf(multipleplayer));
             playGame();
 
-            closeConnection();
         }catch (IOException | ClassNotFoundException | InterruptedException e){
             JOptionPane.showMessageDialog(frame, "Ligação ao servidor foi desconectada!",
                     "Server error!", JOptionPane.ERROR_MESSAGE);
 
         }
+        closeConnection();
     }
     private void buildGui() {
         boardGui = new BoardClient(game);
@@ -53,14 +53,18 @@ public class MainClient implements Observer {
 
     void playGame() throws IOException, ClassNotFoundException, InterruptedException {
         while (true){
+            // Le a lista de jogadores vindos do servidor
             getPlayers();
+
+            // Verifica se o jogo acabou
             if(!checkAlive()){
                 JOptionPane.showMessageDialog(frame, "Jogo Terminado",
                         "Jogo Terminado!", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
-            // Envia a tecla que foi pressionada
+            // Verfica a tecla que foi pressionada
             String direction = boardGui.getLastPressedDirection();
+            // Envia a tecla para o servidor
             sendInformation(direction);
             boardGui.clearLastPressedDirection();
         }
@@ -75,6 +79,7 @@ public class MainClient implements Observer {
     void getPlayers() throws IOException, ClassNotFoundException, InterruptedException {
         InputStream iStream = socket.getInputStream();
         ObjectInputStream oiStream = new ObjectInputStream(iStream);
+        // le a lista de players que recebe do servidor
         List<PlayerMinimal> listPlayers = (List<PlayerMinimal>) oiStream.readObject();
         game.updateBoard(listPlayers);
     }
@@ -82,7 +87,8 @@ public class MainClient implements Observer {
     void sendInformation(String direction) throws IOException {
         OutputStream oStream = socket.getOutputStream();
         PrintWriter ooStream = new PrintWriter(new BufferedWriter(new OutputStreamWriter(oStream)), true);
-        // Envia como texto a direção
+        // Envia como texto para o servidor
+        // neste caso ou é a direção, ou se o jogo é multiplayer
         ooStream.println(direction);
     }
 
@@ -100,7 +106,11 @@ public class MainClient implements Observer {
     }
 
     public static void main(String[] args) throws IOException {
-        MainClient game = new MainClient("localhost", 8080 , true);
+        if(args.length == 3){
+            MainClient game = new MainClient(args[0], Integer.parseInt(args[1]), Boolean.parseBoolean(args[2]));
+        }else {
+            MainClient game = new MainClient("localhost", 8080, true);
+        }
     }
 
 }
