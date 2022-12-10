@@ -59,7 +59,6 @@ public class Game extends Observable {
 
     public void addBots(){
         try {
-            Thread.sleep(10000);
             //Cria os jogadores BOTS e iniciaos
             System.out.println("Vai ser criado o jogo com " + MAXBOTS + " BOTS");
             for (int i = 1; i <= MAXBOTS; i++ ){

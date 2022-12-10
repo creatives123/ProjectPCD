@@ -17,6 +17,9 @@ public class PhoneyHumanPlayer extends Player {
 	@Override
 	public void run() {
 		setinitialposition();
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e1) {e1.printStackTrace();}
 
 		// O bot só executa enquanto o currentStrenght estiver entre ]0; 10[ e o jogo não tiver vencedores
 		while (super.getCurrentStrength() != 0 && super.getCurrentStrength() != Game.MAXLIFE && !game.Winners()){
